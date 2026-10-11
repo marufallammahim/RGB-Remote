@@ -38,8 +38,8 @@ width: 6,
 ),
 child: Padding(
 padding: const EdgeInsets.symmetric(
-horizontal: 24,
-vertical: 36,
+horizontal: 8,
+vertical: 14,
 ),
 child: Column(
 mainAxisSize: MainAxisSize.min,
