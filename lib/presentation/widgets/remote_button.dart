@@ -100,8 +100,8 @@ eventController.add(EventState.lightEffect);
           ),
         ),
         child: SizedBox(
-          width: 56,
-          height: 56,
+          width: 64,
+          height: 64,
           child: _buildChild(widget.command),
         ),
       );
