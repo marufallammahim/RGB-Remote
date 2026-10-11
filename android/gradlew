@@ -1,0 +1,27 @@
+#!/usr/bin/env sh
+# Gradle launcher for this project. Downloads the pinned distribution if needed.
+set -eu
+APP_HOME=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+DIST_URL=$(sed -n 's/^distributionUrl=//p' "$APP_HOME/gradle/wrapper/gradle-wrapper.properties" | sed 's/\\:/\:/g')
+DIST_FILE=${DIST_URL##*/}
+DIST_NAME=${DIST_FILE%.zip}
+GRADLE_VERSION=${DIST_NAME#gradle-}
+GRADLE_VERSION=${GRADLE_VERSION%-all}
+GRADLE_USER_HOME=${GRADLE_USER_HOME:-"$HOME/.gradle"}
+DIST_ROOT="$GRADLE_USER_HOME/wrapper/dists/$DIST_NAME/manual"
+GRADLE_HOME="$DIST_ROOT/gradle-$GRADLE_VERSION"
+if [ ! -x "$GRADLE_HOME/bin/gradle" ]; then
+  mkdir -p "$DIST_ROOT"
+  TMP_ZIP="$DIST_ROOT/$DIST_FILE.tmp"
+  if command -v curl >/dev/null 2>&1; then
+    curl --fail --location --retry 3 "$DIST_URL" --output "$TMP_ZIP"
+  elif command -v wget >/dev/null 2>&1; then
+    wget -O "$TMP_ZIP" "$DIST_URL"
+  else
+    echo "ERROR: curl or wget is required to download Gradle." >&2
+    exit 1
+  fi
+  unzip -q -o "$TMP_ZIP" -d "$DIST_ROOT"
+  rm -f "$TMP_ZIP"
+fi
+exec "$GRADLE_HOME/bin/gradle" "$@"

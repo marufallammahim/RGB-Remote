@@ -1,0 +1,123 @@
+
+workflows:
+  android-debug:
+    name: RGB Remote - Android Debug APK
+    max_build_duration: 60
+    instance_type: linux_x2
+
+    environment:
+      flutter: stable
+      java: 17
+
+    triggering:
+      events:
+        - push
+        - pull_request
+      branch_patterns:
+        - pattern: main
+          include: true
+          source: true
+
+    scripts:
+      - name: Configure Android SDK path
+        script: |
+          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
+          echo "sdk.dir=$ANDROID_SDK_ROOT" >> "$CM_BUILD_DIR/android/local.properties"
+
+      - name: Get Flutter dependencies
+        script: flutter pub get
+
+      - name: Run Flutter analysis
+        script: flutter analyze
+
+      - name: Run Flutter tests
+        script: flutter test
+
+      - name: Build installable Android debug APK
+        script: flutter build apk --debug
+
+    artifacts:
+      - build/app/outputs/flutter-apk/*.apk
+      - flutter_drive.log
+      - $HOME/.gradle/daemon/**/daemon-*.out.log
+
+    publishing:
+      email:
+        notify:
+          success: true
+          failure: true
+
+  android-release:
+    name: RGB Remote - Signed Android Release
+    max_build_duration: 60
+    instance_type: linux_x2
+
+    environment:
+      flutter: stable
+      java: 17
+      android_signing:
+        - rgbremote_keystore
+
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: 'v*'
+          include: true
+
+    scripts:
+      - name: Configure Android SDK path
+        script: |
+          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
+          echo "sdk.dir=$ANDROID_SDK_ROOT" >> "$CM_BUILD_DIR/android/local.properties"
+
+      - name: Validate release version
+        script: |
+          set -eu
+
+          if [ -z "${CM_TAG:-}" ]; then
+            echo "ERROR: Missing Git tag."
+            exit 1
+          fi
+
+          TAG_VERSION="${CM_TAG#v}"
+
+          if ! printf '%s\n' "$TAG_VERSION" | grep -Eq '^[0-9]+\.[0-9]+$'; then
+            echo "ERROR: Use tags such as v1.0, v1.1, or v1.2."
+            exit 1
+          fi
+
+          PUBSPEC_VERSION=$(sed -n 's/^version: *\([^+]*\).*/\1/p' pubspec.yaml | head -n 1)
+          EXPECTED_VERSION="${TAG_VERSION}.0"
+
+          if [ "$PUBSPEC_VERSION" != "$EXPECTED_VERSION" ]; then
+            echo "ERROR: Git tag $CM_TAG requires pubspec version $EXPECTED_VERSION"
+            echo "Current pubspec version: $PUBSPEC_VERSION"
+            exit 1
+          fi
+
+          echo "Release version validated: $CM_TAG ($PUBSPEC_VERSION)"
+
+      - name: Get Flutter dependencies
+        script: flutter pub get
+
+      - name: Run Flutter analysis
+        script: flutter analyze
+
+      - name: Build signed Android App Bundle
+        script: flutter build appbundle --release
+
+      - name: Build signed Android APK
+        script: flutter build apk --release
+
+    artifacts:
+      - build/app/outputs/bundle/release/*.aab
+      - build/app/outputs/flutter-apk/*-release.apk
+      - build/**/outputs/**/mapping.txt
+      - flutter_drive.log
+
+    publishing:
+      email:
+        notify:
+          success: true
+          failure: true

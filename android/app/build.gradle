@@ -1,0 +1,70 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
+android {
+    namespace = "com.marufallammahim.rgbremote"
+    compileSdk = flutter.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+
+    defaultConfig {
+        applicationId = "com.marufallammahim.rgbremote"
+        minSdk = flutter.minSdkVersion
+        targetSdk = flutter.targetSdkVersion
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+    }
+
+    signingConfigs {
+        release {
+            // Codemagic signing variables are used only when a keystore path is provided.
+            if (System.getenv('CM_KEYSTORE_PATH')) {
+                storeFile file(System.getenv('CM_KEYSTORE_PATH'))
+                storePassword System.getenv('CM_KEYSTORE_PASSWORD')
+                keyAlias System.getenv('CM_KEY_ALIAS')
+                keyPassword System.getenv('CM_KEY_PASSWORD')
+            } else if (keystorePropertiesFile.exists() && keystoreProperties['storeFile']) {
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            // Use the debug key only when no release keystore is configured (CI/testing builds).
+            if (System.getenv('CM_KEYSTORE_PATH') ||
+                    (keystorePropertiesFile.exists() && keystoreProperties['storeFile'])) {
+                signingConfig signingConfigs.release
+            } else {
+                signingConfig signingConfigs.debug
+            }
+        }
+    }
+}
+
+flutter {
+    source = "../.."
+}
