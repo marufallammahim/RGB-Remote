@@ -15,84 +15,115 @@ import '../../plugins/ir_sensor_plugin.dart';
 import '../screens/remote_screen.dart';
 
 class RemoteButton extends StatefulWidget {
-  final ProntoCommand command;
-  final TextStyle? labelStyle;
+final ProntoCommand command;
+final TextStyle? labelStyle;
 
-  const RemoteButton(
-    this.command, {
-    super.key,
-    this.labelStyle,
-  });
+const RemoteButton(
+this.command, {
+super.key,
+this.labelStyle,
+});
 
-  @override
-  State<RemoteButton> createState() => _RemoteButtonState();
+@override
+State<RemoteButton> createState() => _RemoteButtonState();
 }
 
 class _RemoteButtonState extends State<RemoteButton> {
-  final _settingsService = SettingsService();
+final SettingsService _settingsService = SettingsService();
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(6),
-      child: ValueListenableBuilder<AppSettings>(
-        valueListenable: _settingsService.settingsNotifier,
-        builder: (context, settings, child) {
-          return NeumorphicButton(
-            onPressed: () async {
-              try {
-                if (await IrSensorPlugin.hasIrEmitter) {
-                  if (settings.isLightEnabled) eventController.add(EventState.lightEffect);
-                  if (settings.isSoundEnabled) await IrSensorPlugin.playSound(soundName: settings.soundFileName);
-                  if (settings.isVibrationEnabled) await IrSensorPlugin.vibrate();
-                  await IrSensorPlugin.transmitString(pattern: widget.command.pattern);
-                } else {
-                  AlertController.show(
-                    AppStrings.irBlasterUnavailableTitle,
-                    AppStrings.irBlasterUnavailableMessage,
-                    TypeAlert.error,
-                  );
-                }
-              } on PlatformException catch (e) {
-                AlertController.show(AppStrings.error, "${e.message}", TypeAlert.error);
+@override
+Widget build(BuildContext context) {
+return Padding(
+padding: const EdgeInsets.all(6),
+child: ValueListenableBuilder<AppSettings>(
+valueListenable: _settingsService.settingsNotifier,
+builder: (context, settings, child) {
+return NeumorphicButton(
+onPressed: () async {
+try {
+if (await IrSensorPlugin.hasIrEmitter) {
+if (settings.isLightEnabled) {
+eventController.add(EventState.lightEffect);
+}
+
+              if (settings.isSoundEnabled) {
+                await IrSensorPlugin.playSound(
+                  soundName: settings.soundFileName,
+                );
               }
 
-              if (await IrSensorPlugin.hasIrEmitter) {
-                await RemoteAssistPromptService.maybeShowPrompt(onPrompt: () {
-                  eventController.add(EventState.showPrompt);
-                });
+              if (settings.isVibrationEnabled) {
+                await IrSensorPlugin.vibrate();
               }
-            },
-            padding: EdgeInsets.zero,
-            provideHapticFeedback: false,
-            style: NeumorphicStyle(
-              color: HexColor(widget.command.color),
-              boxShape: NeumorphicBoxShape.circle(),
-              lightSource: LightSource.topLeft,
-              depth: 3,
-              intensity: 1,
-              surfaceIntensity: 0.5,
-              shape: NeumorphicShape.convex,
-              shadowLightColor: AppColors.kShadowLightColor,
-              shadowDarkColor: AppColors.kShadowDarkColor,
-              border: NeumorphicBorder(color: AppColors.kButtonBorderColor, width: 1),
-            ),
-            child: SizedBox(
-              width: 50,
-              height: 50,
-              child: _buildChild(widget.command),
-            ),
-          );
+
+              await IrSensorPlugin.transmitString(
+                pattern: widget.command.pattern,
+              );
+            } else {
+              AlertController.show(
+                AppStrings.irBlasterUnavailableTitle,
+                AppStrings.irBlasterUnavailableMessage,
+                TypeAlert.error,
+              );
+            }
+          } on PlatformException catch (e) {
+            AlertController.show(
+              AppStrings.error,
+              '${e.message}',
+              TypeAlert.error,
+            );
+          }
+
+          if (await IrSensorPlugin.hasIrEmitter) {
+            await RemoteAssistPromptService.maybeShowPrompt(
+              onPrompt: () {
+                eventController.add(EventState.showPrompt);
+              },
+            );
+          }
         },
-      ),
-    );
-  }
+        padding: EdgeInsets.zero,
+        provideHapticFeedback: false,
+        style: NeumorphicStyle(
+          color: HexColor(widget.command.color),
+          boxShape: NeumorphicBoxShape.circle(),
+          lightSource: LightSource.topLeft,
+          depth: 3,
+          intensity: 1,
+          surfaceIntensity: 0.5,
+          shape: NeumorphicShape.convex,
+          shadowLightColor: AppColors.kShadowLightColor,
+          shadowDarkColor: AppColors.kShadowDarkColor,
+          border: NeumorphicBorder(
+            color: AppColors.kButtonBorderColor,
+            width: 1,
+          ),
+        ),
+        child: SizedBox(
+          width: 56,
+          height: 56,
+          child: _buildChild(widget.command),
+        ),
+      );
+    },
+  ),
+);
 
-  Widget _buildChild(ProntoCommand command) {
-    return Center(
-      child: widget.labelStyle != null
-          ? Text(command.name, style: widget.labelStyle)
-          : Icon(command.icon, color: AppColors.kBlackColor),
-    );
-  }
+}
+
+Widget _buildChild(ProntoCommand command) {
+return Center(
+child: widget.labelStyle != null
+? Text(
+command.name,
+style: widget.labelStyle,
+textAlign: TextAlign.center,
+)
+: Icon(
+command.icon,
+color: AppColors.kBlackColor,
+size: 24,
+),
+);
+}
 }
