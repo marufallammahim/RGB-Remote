@@ -14,178 +14,243 @@ import '../widgets/ir_light_effect.dart';
 import 'components/remote_ui.dart';
 import 'settings_screen.dart';
 
-final StreamController<EventState> eventController = StreamController.broadcast();
+final StreamController<EventState> eventController =
+StreamController<EventState>.broadcast();
 
 enum EventState {
-  lightEffect,
-  showPrompt,
+lightEffect,
+showPrompt,
 }
 
 class RemoteScreen extends StatefulWidget {
-  const RemoteScreen({super.key});
+const RemoteScreen({super.key});
 
-  @override
-  State<RemoteScreen> createState() => _RemoteScreenState();
+@override
+State<RemoteScreen> createState() => _RemoteScreenState();
 }
 
-class _RemoteScreenState extends State<RemoteScreen> with SingleTickerProviderStateMixin {
-  final SettingsService _settingsService = SettingsService();
-  final JustTheController _tooltipController = JustTheController();
+class _RemoteScreenState extends State<RemoteScreen>
+with SingleTickerProviderStateMixin {
+final SettingsService _settingsService = SettingsService();
 
-  late AnimationController _animationController;
-  late Animation<double> _opacityAnimation;
-  late StreamSubscription<EventState> _subscription;
+final JustTheController _tooltipController = JustTheController();
 
-  late int _selectedRemote;
+late AnimationController _animationController;
+late Animation<double> _opacityAnimation;
+late StreamSubscription<EventState> _subscription;
 
-  final List<RemoteConfig> _remotes = [
-    RemoteConfig(name: "Remote 1", ui: RemoteUI(prontoData: getProntoData(ProntoDataType.type1))),
-    RemoteConfig(name: "Remote 2", ui: RemoteUI(prontoData: getProntoData(ProntoDataType.type2))),
-  ];
+late int _selectedRemote;
 
-  @override
-  void initState() {
-    super.initState();
-    _selectedRemote = _settingsService.settingsNotifier.value.remoteIndex;
+final List<RemoteConfig> _remotes = [
+RemoteConfig(
+name: 'Remote 1',
+ui: RemoteUI(
+prontoData: getProntoData(ProntoDataType.type1),
+),
+),
+RemoteConfig(
+name: 'Remote 2',
+ui: RemoteUI(
+prontoData: getProntoData(ProntoDataType.type2),
+),
+),
+];
 
-    _initializeAnimationController();
+@override
+void initState() {
+super.initState();
+
+_selectedRemote =
+    _settingsService.settingsNotifier.value.remoteIndex
+        .clamp(0, _remotes.length - 1)
+        .toInt();
+
+_initializeAnimationController();
+
+}
+
+void _initializeAnimationController() {
+_animationController = AnimationController(
+duration: const Duration(milliseconds: 100),
+vsync: this,
+);
+
+_animationController.addStatusListener((status) {
+  if (status == AnimationStatus.completed) {
+    _animationController.reverse();
   }
+});
 
-  void _initializeAnimationController() {
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 100),
-      vsync: this,
-    );
+_opacityAnimation = Tween<double>(
+  begin: 0.0,
+  end: 1.0,
+).animate(
+  CurvedAnimation(
+    parent: _animationController,
+    curve: Curves.easeInOut,
+  ),
+);
 
-    _animationController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _animationController.reverse();
-      }
-    });
+_subscription = eventController.stream.listen((event) {
+  if (!mounted) return;
 
-    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
-    );
+  switch (event) {
+    case EventState.lightEffect:
+      _animationController.forward();
 
-    _subscription = eventController.stream.listen((event) {
-      switch (event) {
-        case EventState.lightEffect:
-          _animationController.forward();
-          break;
-        case EventState.showPrompt:
-          _tooltipController.showTooltip(immediately: true);
-      }
-    });
+    case EventState.showPrompt:
+      _tooltipController.showTooltip(immediately: true);
   }
+});
 
-  Future<void> _updateSelectedRemote(int index) async {
-    _selectedRemote = index.clamp(0, _remotes.length - 1);
-    await _settingsService.updateRemote(_selectedRemote);
-  }
+}
 
-  @override
-  void dispose() {
-    _animationController.dispose();
-    _subscription.cancel();
-    super.dispose();
-  }
+Future<void> _updateSelectedRemote(int index) async {
+final int newIndex =
+index.clamp(0, _remotes.length - 1).toInt();
 
-  @override
-  Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) async {
-        if (didPop) return;
-        await BackPressHandler.handleBackPress();
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, SettingsScreen.routeName);
-              },
-              icon: Icon(Icons.settings),
+if (newIndex == _selectedRemote) return;
+
+setState(() {
+  _selectedRemote = newIndex;
+});
+
+await _settingsService.updateRemote(newIndex);
+
+}
+
+@override
+void dispose() {
+_subscription.cancel();
+_animationController.dispose();
+_tooltipController.hideTooltip(immediately: true);
+
+super.dispose();
+
+}
+
+@override
+Widget build(BuildContext context) {
+return PopScope(
+canPop: false,
+onPopInvokedWithResult: (didPop, result) async {
+if (didPop) return;
+await BackPressHandler.handleBackPress();
+},
+child: Scaffold(
+appBar: AppBar(
+actions: [
+IconButton(
+onPressed: () {
+Navigator.pushNamed(
+context,
+SettingsScreen.routeName,
+);
+},
+icon: const Icon(Icons.settings),
+),
+],
+),
+body: ValueListenableBuilder<AppSettings>(
+valueListenable: _settingsService.settingsNotifier,
+builder: (context, settings, child) {
+return Column(
+children: [
+_buildRemoteSelector(),
+
+            Expanded(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    padding: const EdgeInsets.only(
+                      left: 8,
+                      right: 8,
+                      top: 8,
+                      bottom: 12,
+                    ),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight - 20,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AnimatedBuilder(
+                            animation: _animationController,
+                            builder: (context, child) {
+                              return Opacity(
+                                opacity: _opacityAnimation.value,
+                                child: child,
+                              );
+                            },
+                            child: const IRLightEffect(),
+                          ),
+
+                          const SizedBox(height: 8),
+
+                          // Remote UI
+                          SizedBox(
+                            width: double.infinity,
+                            child: _remotes[_selectedRemote].ui,
+                          ),
+
+                          const SizedBox(height: 12),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
-        ),
-        body: ValueListenableBuilder<AppSettings>(
-          valueListenable: _settingsService.settingsNotifier,
-          builder: (context, settings, child) {
-            return Column(
-              children: [
-                _buildRemoteSelector(),
-                Expanded(
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverFillRemaining(
-                        hasScrollBody: false,
-                        fillOverscroll: true,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            AnimatedBuilder(
-                              animation: _animationController,
-                              builder: (BuildContext context, Widget? child) {
-                                return Opacity(
-                                  opacity: _opacityAnimation.value,
-                                  child: child,
-                                );
-                              },
-                              child: IRLightEffect(),
-                            ),
-                            // Render remote ui
-                            _remotes[_selectedRemote].ui,
-                            const SizedBox(height: 40),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            );
-          },
+        );
+      },
+    ),
+  ),
+);
+
+}
+
+Widget _buildRemoteSelector() {
+return Row(
+mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+children: [
+IconButton(
+icon: const Icon(Icons.arrow_left),
+onPressed: _selectedRemote > 0
+? () => _updateSelectedRemote(_selectedRemote - 1)
+: null,
+),
+
+    JustTheTooltip(
+      controller: _tooltipController,
+      preferredDirection: AxisDirection.up,
+      backgroundColor: AppColors.kWhiteColor,
+      isModal: true,
+      showDuration: const Duration(seconds: 10),
+      margin: const EdgeInsets.all(10),
+      borderRadius: BorderRadius.circular(8),
+      content: TooltipWidget(
+        onDismiss: () {
+          _tooltipController.hideTooltip(immediately: true);
+        },
+      ),
+      child: Text(
+        '${_remotes[_selectedRemote].name}/${_remotes.length}',
+        style: const TextStyle(
+          fontWeight: FontWeight.w500,
         ),
       ),
-    );
-  }
+    ),
 
-  Widget _buildRemoteSelector() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        IconButton(
-          icon: const Icon(Icons.arrow_left),
-          onPressed: _selectedRemote > 0
-              ? () => _updateSelectedRemote(_selectedRemote - 1)
-              : null,
-        ),
-        JustTheTooltip(
-          controller: _tooltipController,
-          preferredDirection: AxisDirection.up,
-          backgroundColor: AppColors.kWhiteColor,
-          isModal: true,
-          showDuration: const Duration(seconds: 10),
-          margin: const EdgeInsets.all(10),
-          borderRadius: BorderRadius.circular(8),
-          content: TooltipWidget(
-            onDismiss: () {
-              _tooltipController.hideTooltip(immediately: true);
-            },
-          ),
-          child: Text(
-            "${_remotes[_selectedRemote].name}/${_remotes.length}",
-            style: const TextStyle(fontWeight: FontWeight.w500),
-          ),
-        ),
-        IconButton(
-          icon: const Icon(Icons.arrow_right),
-          onPressed: _selectedRemote < _remotes.length - 1
-              ? () => _updateSelectedRemote(_selectedRemote + 1)
-              : null,
-        ),
-      ],
-    );
-  }
+    IconButton(
+      icon: const Icon(Icons.arrow_right),
+      onPressed: _selectedRemote < _remotes.length - 1
+          ? () => _updateSelectedRemote(_selectedRemote + 1)
+          : null,
+    ),
+  ],
+);
+
+}
 }
