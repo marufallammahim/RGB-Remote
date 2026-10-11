@@ -32,7 +32,6 @@ State<RemoteScreen> createState() => _RemoteScreenState();
 class _RemoteScreenState extends State<RemoteScreen>
 with SingleTickerProviderStateMixin {
 final SettingsService _settingsService = SettingsService();
-
 final JustTheController _tooltipController = JustTheController();
 
 late AnimationController _animationController;
@@ -43,13 +42,13 @@ late int _selectedRemote;
 
 final List<RemoteConfig> _remotes = [
 RemoteConfig(
-name: 'Remote 1',
+name: 'Preset ONE ✨',
 ui: RemoteUI(
 prontoData: getProntoData(ProntoDataType.type1),
 ),
 ),
 RemoteConfig(
-name: 'Remote 2',
+name: 'Preset TWO 🤌🏻',
 ui: RemoteUI(
 prontoData: getProntoData(ProntoDataType.type2),
 ),
@@ -60,10 +59,9 @@ prontoData: getProntoData(ProntoDataType.type2),
 void initState() {
 super.initState();
 
-_selectedRemote =
-    _settingsService.settingsNotifier.value.remoteIndex
-        .clamp(0, _remotes.length - 1)
-        .toInt();
+_selectedRemote = _settingsService.settingsNotifier.value.remoteIndex
+    .clamp(0, _remotes.length - 1)
+    .toInt();
 
 _initializeAnimationController();
 
@@ -97,17 +95,18 @@ _subscription = eventController.stream.listen((event) {
   switch (event) {
     case EventState.lightEffect:
       _animationController.forward();
+      break;
 
     case EventState.showPrompt:
       _tooltipController.showTooltip(immediately: true);
+      break;
   }
 });
 
 }
 
 Future<void> _updateSelectedRemote(int index) async {
-final int newIndex =
-index.clamp(0, _remotes.length - 1).toInt();
+final int newIndex = index.clamp(0, _remotes.length - 1).toInt();
 
 if (newIndex == _selectedRemote) return;
 
@@ -157,40 +156,39 @@ builder: (context, settings, child) {
 return Column(
 children: [
 _buildRemoteSelector(),
+Expanded(
+child: LayoutBuilder(
+builder: (context, constraints) {
+return SingleChildScrollView(
+padding: const EdgeInsets.symmetric(
+horizontal: 8,
+vertical: 8,
+),
+child: ConstrainedBox(
+constraints: BoxConstraints(
+minHeight:
+(constraints.maxHeight - 16).clamp(
+0.0,
+double.infinity,
+),
+),
+child: Column(
+mainAxisAlignment: MainAxisAlignment.center,
+children: [
+AnimatedBuilder(
+animation: _animationController,
+builder: (context, child) {
+return Opacity(
+opacity: _opacityAnimation.value,
+child: child,
+);
+},
+child: const IRLightEffect(),
+),
+const SizedBox(height: 8),
 
-            Expanded(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  return SingleChildScrollView(
-                    padding: const EdgeInsets.only(
-                      left: 8,
-                      right: 8,
-                      top: 8,
-                      bottom: 12,
-                    ),
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        minHeight: constraints.maxHeight - 20,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          AnimatedBuilder(
-                            animation: _animationController,
-                            builder: (context, child) {
-                              return Opacity(
-                                opacity: _opacityAnimation.value,
-                                child: child,
-                              );
-                            },
-                            child: const IRLightEffect(),
-                          ),
-
-                          const SizedBox(height: 8),
-
-                          // Remote UI
-                          SizedBox(
-                            width: double.infinity,
+                          // Remote stays centered and uses its own size.
+                          Center(
                             child: _remotes[_selectedRemote].ui,
                           ),
 
@@ -221,36 +219,33 @@ onPressed: _selectedRemote > 0
 ? () => _updateSelectedRemote(_selectedRemote - 1)
 : null,
 ),
-
-    JustTheTooltip(
-      controller: _tooltipController,
-      preferredDirection: AxisDirection.up,
-      backgroundColor: AppColors.kWhiteColor,
-      isModal: true,
-      showDuration: const Duration(seconds: 10),
-      margin: const EdgeInsets.all(10),
-      borderRadius: BorderRadius.circular(8),
-      content: TooltipWidget(
-        onDismiss: () {
-          _tooltipController.hideTooltip(immediately: true);
-        },
-      ),
-      child: Text(
-        '${_remotes[_selectedRemote].name}/${_remotes.length}',
-        style: const TextStyle(
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    ),
-
-    IconButton(
-      icon: const Icon(Icons.arrow_right),
-      onPressed: _selectedRemote < _remotes.length - 1
-          ? () => _updateSelectedRemote(_selectedRemote + 1)
-          : null,
-    ),
-  ],
+JustTheTooltip(
+controller: _tooltipController,
+preferredDirection: AxisDirection.up,
+backgroundColor: AppColors.kWhiteColor,
+isModal: true,
+showDuration: const Duration(seconds: 10),
+margin: const EdgeInsets.all(10),
+borderRadius: BorderRadius.circular(8),
+content: TooltipWidget(
+onDismiss: () {
+_tooltipController.hideTooltip(immediately: true);
+},
+),
+child: Text(
+'${_remotes[_selectedRemote].name}/${_remotes.length}',
+style: const TextStyle(
+fontWeight: FontWeight.w500,
+),
+),
+),
+IconButton(
+icon: const Icon(Icons.arrow_right),
+onPressed: _selectedRemote < _remotes.length - 1
+? () => _updateSelectedRemote(_selectedRemote + 1)
+: null,
+),
+],
 );
-
 }
 }
