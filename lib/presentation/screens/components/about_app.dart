@@ -43,7 +43,7 @@ class _AboutAppState extends State<AboutApp> {
           style: AppTextStyle.kGS13W400,
         ),
         Hyperlink(
-          "github.com/marufallammahim/RGB-Remote",
+          "REPOSITORY LINK 🖇️",
           "https://github.com/marufallammahim/RGB-Remote",
         ),
       ],
