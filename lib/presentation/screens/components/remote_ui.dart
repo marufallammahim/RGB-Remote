@@ -35,27 +35,33 @@ class RemoteUI extends StatelessWidget {
             ? constraints.maxWidth
             : screenWidth;
 
-        // Match the reference: a centered card with visible space on both sides.
-        // At 70% of screen width it is slightly larger than the reference's
-        // roughly 64% card, without stretching across the whole screen.
-        final panelWidth = math.min(availableWidth, screenWidth * 0.70);
+        // Preserve the existing remote width and centered layout.
+        final panelWidth = math.min(
+          availableWidth,
+          screenWidth * 0.70,
+        );
+
         const borderWidth = 5.0;
         const horizontalPadding = 7.0;
         const verticalPadding = 10.0;
-        final buttonCellWidth =
-            (panelWidth - borderWidth * 2 - horizontalPadding * 2) / 4;
-        // RemoteButton adds 4 dp of padding on every side. Reserve 8 dp in
-        // each cell so buttons stay large without overflowing on small phones.
-        final buttonSize = math.min(56.0, buttonCellWidth - 8.0)
-            .clamp(36.0, 56.0);
-
-        // Keep the requested 100 logical-pixel status/header area.
         const extraTopHeight = 100.0;
+
+        final buttonCellWidth =
+            (panelWidth -
+                    borderWidth * 2 -
+                    horizontalPadding * 2) /
+                4;
+
+        final buttonSize = math
+            .min(56.0, buttonCellWidth - 8.0)
+            .clamp(36.0, 56.0)
+            .toDouble();
+
         return Transform.translate(
           offset: const Offset(0, -80.0),
           child: SizedBox(
             width: panelWidth,
-              child: Card(
+            child: Card(
               elevation: 10,
               shadowColor: const Color(0x66000000),
               color: AppColors.kRemoteColor,
@@ -68,7 +74,7 @@ class RemoteUI extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.fromLTRB(
+                padding: const EdgeInsets.fromLTRB(
                   horizontalPadding,
                   verticalPadding + extraTopHeight,
                   horizontalPadding,
@@ -79,27 +85,30 @@ class RemoteUI extends StatelessWidget {
                   children: [
                     const _RemoteStatusDisplay(),
                     const SizedBox(height: 18),
-                    ..._buttonLayout.map((row) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4.5),
-                      child: Row(
-                        children: row.map((index) {
-                          return Expanded(
-                            child: Center(
-                              child: RemoteButton(
-                                prontoData[index],
-                                buttonSize: buttonSize.toDouble(),
-                                labelStyle: _getLabelStyle(index),
+                    ..._buttonLayout.map(
+                      (row) => Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 4.5,
+                        ),
+                        child: Row(
+                          children: row.map((index) {
+                            return Expanded(
+                              child: Center(
+                                child: RemoteButton(
+                                  prontoData[index],
+                                  buttonSize: buttonSize,
+                                  labelStyle: _getLabelStyle(index),
+                                ),
                               ),
-                            ),
-                          );
-                        }).toList(),
+                            );
+                          }).toList(),
+                        ),
                       ),
-                    );
-                  }).toList(),
+                    ),
                   ],
                 ),
-              ),          ),
+              ),
+            ),
           ),
         );
       },
@@ -123,45 +132,68 @@ class RemoteUI extends StatelessWidget {
   }
 }
 
-
-/// Slim, bordered status screen integrated into the remote's existing top area.
+/// Slim, bordered status screen integrated into the remote's top area.
 class _RemoteStatusDisplay extends StatefulWidget {
   const _RemoteStatusDisplay();
 
   @override
-  State<_RemoteStatusDisplay> createState() => _RemoteStatusDisplayState();
+  State<_RemoteStatusDisplay> createState() =>
+      _RemoteStatusDisplayState();
 }
 
 class _RemoteStatusDisplayState extends State<_RemoteStatusDisplay> {
   String _shown = '';
-  String _target = '';
   int _generation = 0;
 
   @override
   void initState() {
     super.initState();
-    _target = remoteStatusNotifier.value;
-    _shown = _target;
+
+    _shown = remoteStatusNotifier.value;
     remoteStatusNotifier.addListener(_onStatusChanged);
   }
 
   void _onStatusChanged() {
+    if (!mounted) return;
+
     final target = remoteStatusNotifier.value;
     final generation = ++_generation;
-    setState(() { _target = target; _shown = ''; });
+
+    setState(() {
+      _shown = '';
+    });
+
     unawaited(_typeNext(target, generation, 0));
   }
 
-  Future<void> _typeNext(String target, int generation, int index) async {
-    if (index >= target.length || !mounted || generation != _generation) return;
-    await Future<void>.delayed(const Duration(milliseconds: 34));
+  Future<void> _typeNext(
+    String target,
+    int generation,
+    int index,
+  ) async {
     if (!mounted || generation != _generation) return;
-    setState(() => _shown = target.substring(0, index + 1));
-    unawaited(_typeNext(target, generation, index + 1));
+
+    if (index >= target.length) return;
+
+    await Future<void>.delayed(
+      const Duration(milliseconds: 34),
+    );
+
+    if (!mounted || generation != _generation) return;
+
+    setState(() {
+      _shown = target.substring(0, index + 1);
+    });
+
+    unawaited(
+      _typeNext(target, generation, index + 1),
+    );
   }
 
   @override
   void dispose() {
+    // Invalidate any pending animation before disposing.
+    _generation++;
     remoteStatusNotifier.removeListener(_onStatusChanged);
     super.dispose();
   }
@@ -176,17 +208,32 @@ class _RemoteStatusDisplayState extends State<_RemoteStatusDisplay> {
       decoration: BoxDecoration(
         color: const Color(0xFFF8FBFC),
         borderRadius: BorderRadius.circular(13),
-        border: Border.all(color: const Color(0xFF294453), width: 2.2),
-        boxShadow: const [BoxShadow(color: Color(0x16000000), blurRadius: 5, offset: Offset(0, 2))],
+        border: Border.all(
+          color: const Color(0xFF294453),
+          width: 2.2,
+        ),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x16000000),
+            blurRadius: 5,
+            offset: Offset(0, 2),
+          ),
+        ],
       ),
-      child: FittedBox(
-        fit: BoxFit.scaleDown,
-        child: Text(
-          _shown,
-          maxLines: 1,
-          style: const TextStyle(
-            color: Color(0xFF203744), fontSize: 14, fontWeight: FontWeight.w700, letterSpacing: 1.05,
-            fontFamily: 'monospace',
+      child: SizedBox(
+        width: double.infinity,
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            _shown,
+            maxLines: 1,
+            style: const TextStyle(
+              color: Color(0xFF203744),
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.05,
+              fontFamily: 'monospace',
+            ),
           ),
         ),
       ),
