@@ -2,10 +2,20 @@ name: Flutter Android CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - beta-testing
+
   pull_request:
-    branches: [main]
+    branches:
+      - beta-testing
+
   workflow_dispatch:
+    inputs:
+      run_tests:
+        description: 'Run Flutter tests before building'
+        required: true
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -15,16 +25,21 @@ env:
 
 jobs:
   android:
+    name: Build Android APK
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
+      - name: Checkout beta-testing branch
         uses: actions/checkout@v4
+        with:
+          ref: beta-testing
 
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: ${{ env.JAVA_VERSION }}
+          java-version: '17'
+          cache: gradle
 
       - name: Set up Flutter stable
         uses: subosito/flutter-action@v2
@@ -43,16 +58,17 @@ jobs:
       - name: Analyze Dart code
         run: flutter analyze
 
-      - name: Run tests
+      - name: Run Flutter tests
+        if: github.event_name != 'workflow_dispatch' || inputs.run_tests
         run: flutter test
 
-      - name: Build Android release APK (CI/debug signing only)
+      - name: Build Android release APK
         run: flutter build apk --release
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: rgb-remote-release-apk-ci
+          name: rgb-remote-beta-testing-apk
           path: build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
           retention-days: 14
