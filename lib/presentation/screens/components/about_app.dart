@@ -33,7 +33,7 @@ class _AboutAppState extends State<AboutApp> {
     return Column(
       children: [
         Text(
-          "Made with ❤️ by Maruf Allam Mahim",
+          "Made with ❤️ by 𝐌𝐀𝐑𝐔𝐅 𝐀𝐋𝐋𝐀𝐌 𝐌𝐀𝐇𝐈𝐌",
           textAlign: TextAlign.center,
           style: AppTextStyle.kWS14W400,
         ),
