@@ -44,7 +44,7 @@ class RemoteUI extends StatelessWidget {
         const borderWidth = 5.0;
         const horizontalPadding = 7.0;
         const verticalPadding = 10.0;
-        const extraTopHeight = 0.0;
+       // const extraTopHeight = 0.0;
 
         final buttonCellWidth =
             (panelWidth -
