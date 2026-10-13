@@ -99,9 +99,9 @@ class _RemoteButtonState extends State<RemoteButton> {
   String _statusForCommand(String rawName) {
     final name = rawName.trim().toUpperCase();
     const names = <String, String>{
-      'R': 'RED', 'R1': 'RED 1', 'R2': 'RED 2', 'R3': 'RED 3', 'R4': 'RED 4',
-      'G': 'GREEN', 'G1': 'GREEN 1', 'G2': 'GREEN 2', 'G3': 'GREEN 3', 'G4': 'GREEN 4',
-      'B': 'BLUE', 'B1': 'BLUE 1', 'B2': 'BLUE 2', 'B3': 'BLUE 3', 'B4': 'BLUE 4',
+      'R': 'RED', 'R1': 'ORANGE', 'R2': 'AMBER', 'R3': 'GOLDEN', 'R4': 'YELLOW',
+      'G': 'GREEN', 'G1': 'LIGHT GREEN', 'G2': 'TURQUOISE', 'G3': 'CYAN', 'G4': 'SKY BLUE',
+      'B': 'BLUE', 'B1': 'LIGHT BLUE', 'B2': 'INDIGO', 'B3': 'VIOLET', 'B4': 'PINK',
       'W': 'WHITE', 'ON': 'POWER ON', 'OFF': 'POWER OFF',
       'B+': 'BRIGHTNESS UP', 'B-': 'BRIGHTNESS DOWN',
       'FLASH': 'FLASH', 'STROBE': 'STROBE', 'FADE': 'FADE', 'SMOOTH': 'SMOOTH',
