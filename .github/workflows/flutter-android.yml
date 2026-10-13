@@ -1,13 +1,9 @@
-name: Flutter Android CI
+name: RGB-LED-REMOTE Android Release
 
 on:
   push:
     branches:
-      - beta-testing
-
-  pull_request:
-    branches:
-      - beta-testing
+      - main
 
   workflow_dispatch:
     inputs:
@@ -18,21 +14,21 @@ on:
         default: true
 
 permissions:
-  contents: read
+  contents: write
 
 env:
   JAVA_VERSION: '17'
 
 jobs:
   android:
-    name: Build Android APK
+    name: Build and Publish Android APK
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout beta-testing branch
+      - name: Checkout main branch
         uses: actions/checkout@v4
         with:
-          ref: beta-testing
+          ref: main
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -41,13 +37,13 @@ jobs:
           java-version: '17'
           cache: gradle
 
-      - name: Set up Flutter stable
+      - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
           cache: true
 
-      - name: Configure Android SDK path
+      - name: Configure Android SDK
         run: |
           echo "flutter.sdk=$FLUTTER_ROOT" > android/local.properties
           echo "sdk.dir=$ANDROID_HOME" >> android/local.properties
@@ -62,13 +58,36 @@ jobs:
         if: github.event_name != 'workflow_dispatch' || inputs.run_tests
         run: flutter test
 
-      - name: Build Android release APK
+      - name: Build Release APK
         run: flutter build apk --release
 
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: rgb-remote-beta-testing-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
-          if-no-files-found: error
-          retention-days: 14
+      - name: Prepare APK
+        run: |
+          mkdir -p release
+          cp build/app/outputs/flutter-apk/app-release.apk \
+            release/RGB-LED-REMOTE.apk
+          sha256sum release/RGB-LED-REMOTE.apk \
+            > release/RGB-LED-REMOTE.apk.sha256
+
+      - name: Generate unique release tag
+        id: release_tag
+        run: |
+          echo "tag=build-${GITHUB_RUN_NUMBER}-${GITHUB_RUN_ATTEMPT}" \
+            >> "$GITHUB_OUTPUT"
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${{ steps.release_tag.outputs.tag }}" \
+            release/RGB-LED-REMOTE.apk \
+            release/RGB-LED-REMOTE.apk.sha256 \
+            --target "$GITHUB_SHA" \
+            --title "RGB-LED-REMOTE Build ${GITHUB_RUN_NUMBER}" \
+            --notes "Automated Android release build.
+          
+          Commit: ${GITHUB_SHA}
+          Branch: main
+          APK: RGB-LED-REMOTE.apk
+          
+          Install the APK on your Android device."
