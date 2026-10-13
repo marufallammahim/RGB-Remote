@@ -1,0 +1,86 @@
+packages:
+  flutter:
+    dependency: direct main
+    description: flutter
+    source: sdk
+    version: 0.0.0
+  flutter_dropdown_alert:
+    dependency: direct main
+    description:
+      name: flutter_dropdown_alert
+      sha256: 5d58b6edd6f478e36ef33187999c77139f983ea0fc54cda10ddddc35c585a2f8
+      url: https://pub.dev
+    source: hosted
+    version: 1.0.7
+  flutter_font_icons:
+    dependency: direct main
+    description:
+      name: flutter_font_icons
+      sha256: d06eb0ab903d0e90a9a758de30892ea0d43221f03dad059970384e62479c787e
+      url: https://pub.dev
+    source: hosted
+    version: 2.2.7
+  flutter_lints:
+    dependency: direct dev
+    description:
+      name: flutter_lints
+      sha256: 5398f14efa795ffb7a33e9b6a08798b26a180edac4ad7db3f231e40f82ce11e1
+      url: https://pub.dev
+    source: hosted
+    version: 5.0.0
+  flutter_test:
+    dependency: direct dev
+    description: flutter
+    source: sdk
+    version: 0.0.0
+  just_the_tooltip:
+    dependency: direct main
+    description:
+      name: just_the_tooltip
+      sha256: 7a081133d57285bfb41b331f411006d57b433d7b35772e6155745f6a7a09cb82
+      url: https://pub.dev
+    source: hosted
+    version: 0.0.12
+  material_neumorphic:
+    dependency: direct main
+    description:
+      name: material_neumorphic
+      sha256: efc8c9fff82c19e9a2d807879eb74c74f934c7a5fed3b345497e0771425886e0
+      url: https://pub.dev
+    source: hosted
+    version: 1.2.1
+  package_info_plus:
+    dependency: direct main
+    description:
+      name: package_info_plus
+      sha256: 7976bfe4c583170d6cdc7077e3237560b364149fcd268b5f53d95a991963b191
+      url: https://pub.dev
+    source: hosted
+    version: 8.3.0
+  page_transition:
+    dependency: direct main
+    description:
+      name: page_transition
+      sha256: 9d2a780d7d68b53ae82fbcc43e06a16195e6775e9aae40e55dc0cbb593460f9d
+      url: https://pub.dev
+    source: hosted
+    version: 2.2.1
+  shared_preferences:
+    dependency: direct main
+    description:
+      name: shared_preferences
+      sha256: 6e8bf70b7fef813df4e9a36f658ac46d107db4b4cfe1048b477d4e453a8159f5
+      url: https://pub.dev
+    source: hosted
+    version: 2.5.3
+  url_launcher:
+    dependency: direct main
+    description:
+      name: url_launcher
+      sha256: 9d06212b1362abc2f0f0d78e6f09f726608c74e3b9462e8368bb03314aa8d603
+      url: https://pub.dev
+    source: hosted
+    version: 6.3.1
+sdks:
+  dart: '>=3.7.0-0 <4.0.0'
+  flutter: '>=3.27.0'
