@@ -28,5 +28,5 @@ class AppStrings {
   static const remoteCheckTryAnother = "Try another";
 
   /// Message
-  static const assistMessage = "If this remote doesn't work with your RGB lights, try a different one.";
+  static const assistMessage = "You can control your light flow using Volume Up and Down button";
 }
