@@ -50,7 +50,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     },
                     items: const [
                       DropdownMenuItem(value: 'dark', child: Text('Dark')),
-                      DropdownMenuItem(value: 'amoled', child: Text('AMOLED black')),
+                      DropdownMenuItem(value: 'amoled', child: Text('Pure Black')),
                     ],
                   ),
                 ),
