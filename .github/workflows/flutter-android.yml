@@ -81,7 +81,7 @@ jobs:
         run: |
           gh release create "${{ steps.release_tag.outputs.tag }}" \
             release/RGB-LED-REMOTE.apk \
-            release/RGB-LED-REMOTE-apk's-Singneture.sha256 \
+            release/RGB-LED-REMOTE.sha256 \
             --target "$GITHUB_SHA" \
             --title "RGB-LED-REMOTE Build ${GITHUB_RUN_NUMBER}" \
             --notes "Automated Android release build.
