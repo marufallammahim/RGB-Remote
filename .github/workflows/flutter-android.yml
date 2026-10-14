@@ -1,3 +1,4 @@
+
 name: RGB-LED-REMOTE Android Release
 
 on:
@@ -64,10 +65,15 @@ jobs:
       - name: Prepare APK
         run: |
           mkdir -p release
+
           cp build/app/outputs/flutter-apk/app-release.apk \
             release/RGB-LED-REMOTE.apk
+
           sha256sum release/RGB-LED-REMOTE.apk \
             > release/RGB-LED-REMOTE.apk.sha256
+
+          test -s release/RGB-LED-REMOTE.apk
+          test -s release/RGB-LED-REMOTE.apk.sha256
 
       - name: Generate unique release tag
         id: release_tag
@@ -81,13 +87,14 @@ jobs:
         run: |
           gh release create "${{ steps.release_tag.outputs.tag }}" \
             release/RGB-LED-REMOTE.apk \
-            release/RGB-LED-REMOTE.sha256 \
+            release/RGB-LED-REMOTE.apk.sha256 \
             --target "$GITHUB_SHA" \
             --title "RGB-LED-REMOTE Build ${GITHUB_RUN_NUMBER}" \
             --notes "Automated Android release build.
-          
+
           Commit: ${GITHUB_SHA}
           Branch: main
           APK: RGB-LED-REMOTE.apk
-          
-          You can Install the APK on your Android device. It's tested on android "
+
+          Install the APK on your Android device.
+          Built automatically using GitHub Actions."
