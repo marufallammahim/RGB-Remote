@@ -21,7 +21,7 @@ final StreamController<EventState> eventController =
 
 /// Current command shown in the remote's built-in status display.
 final ValueNotifier<String> remoteStatusNotifier =
-    ValueNotifier<String>('READY • SELECT A COLOR');
+    ValueNotifier<String>('STATUS:READY • SELECT A COLOR');
 
 enum EventState {
 lightEffect,
@@ -94,8 +94,8 @@ Future<void> _handleHardwareVolumeKey(bool increase) async {
   try {
     await IrSensorPlugin.transmitString(pattern: command.pattern);
     remoteStatusNotifier.value = increase
-        ? 'BRIGHTNESS UP • SENT'
-        : 'BRIGHTNESS DOWN • SENT';
+        ? 'VOL+ • BRIGHTNESS UP • SENT'
+        : 'VOL- • BRIGHTNESS DOWN • SENT';
   } catch (error) {
     remoteStatusNotifier.value = 'SEND FAILED • BRIGHTNESS';
     debugPrint('Hardware volume brightness command failed: $error');
