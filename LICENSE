@@ -1,0 +1,301 @@
+RGB-LED-REMOTE — License, Copyright and Usage Policy
+
+Project: RGB-LED-REMOTE
+Copyright Holder: Maruf Allam Mahim
+Copyright Year: 2026
+Primary License: GNU General Public License v3.0 or any later version (GPL-3.0-or-later)
+License Identifier: GPL-3.0-or-later
+Official License: https://www.gnu.org/licenses/gpl-3.0.html
+Repository: https://github.com/marufallammahim/RGB-Remote
+
+---
+
+1. About This License
+
+RGB-LED-REMOTE is an Android application developed using Flutter. It is designed to control compatible RGB LED strip lights and bulbs through supported infrared (IR) hardware and related control functionality.
+
+This project is distributed as free and open-source software under the GNU General Public License, version 3, or (at your option) any later version.
+
+The purpose of this license is to allow users, developers, students, researchers, and organizations to use, study, modify, share, and redistribute the covered software while preserving the same freedoms for downstream recipients.
+
+The term "free software" refers to freedom to use, study, modify, and share the software, not necessarily to a zero purchase price.
+
+2. Copyright Notice
+
+Copyright (C) 2026 Maruf Allam Mahim
+
+Unless otherwise stated in a file-specific copyright notice or a third-party license, the original copyrightable source code and materials contributed by the copyright holder to RGB-LED-REMOTE are licensed under the GNU General Public License, version 3, or any later version.
+
+All rights granted by this license are subject to its terms and conditions.
+
+Nothing in this notice transfers ownership of the original project to another person or organization.
+
+3. Parts of the Project Covered by This License
+
+Subject to ownership rights, third-party notices, and any separate license statements, this license applies to the original project materials, including:
+
+- Flutter and Dart source code.
+- Application logic and control-flow implementations.
+- RGB LED remote-control functionality.
+- Original remote-control button implementations and layouts.
+- Original user-interface components and widgets.
+- Original screen layouts and navigation logic.
+- Original settings and preferences implementations.
+- Original application configuration files.
+- Original theme and color configuration code.
+- Original error-handling and validation implementations.
+- Original application-specific utility functions.
+- Original documentation and project instructions.
+- Original build and automation scripts contributed to the project.
+- Original test code and project-specific testing utilities.
+- Other copyrightable source files expressly included in this project under this license.
+
+The presence of a file in the repository does not, by itself, establish that the copyright holder owns it or can relicense it. Third-party components and materials remain subject to their applicable licenses.
+
+4. Permission to Use the Source Code
+
+You are permitted to use the covered source code for personal, educational, research, experimental, and commercial purposes, provided you comply with the GNU GPLv3 or the applicable later version selected under this license.
+
+You may:
+
+- Read and study the source code.
+- Run the application.
+- Build the application from source.
+- Test and debug the software.
+- Modify the source code to meet your requirements.
+- Reorganize or refactor the code.
+- Improve performance and resource usage.
+- Fix bugs and security vulnerabilities.
+- Add new features.
+- Remove or replace features.
+- Adapt the application for compatible devices.
+- Create modified versions of the covered software.
+- Use the software as a learning resource.
+- Incorporate covered code into another work where the applicable GPL terms permit it.
+- Distribute copies of the original or modified covered software under the terms of this license.
+
+These permissions do not automatically grant rights to third-party trademarks, separately licensed assets, patented technology outside the license grant, or materials that the copyright holder does not own.
+
+5. Modification and Derivative Works
+
+You may modify the covered software and create derivative works.
+
+Examples include:
+
+- Changing the remote-control interface.
+- Adding new RGB LED control functions.
+- Improving infrared transmission logic.
+- Adding supported device configurations.
+- Improving settings persistence.
+- Adding themes or accessibility improvements.
+- Refactoring application architecture.
+- Improving compatibility with supported Android versions.
+- Fixing bugs or performance issues.
+- Creating a customized version for personal or organizational use.
+
+When distributing a modified version of a covered work, you must comply with the applicable GPL requirements.
+
+In particular:
+
+1. Clearly identify significant modifications and include relevant dates.
+2. Preserve required copyright, license, and warranty notices.
+3. License the covered modified work under the GPL as required by the license.
+4. Provide or offer the corresponding source code as required by the applicable GPL distribution provisions.
+5. Do not impose additional restrictions that conflict with the rights granted by the GPL.
+6. Respect the separate licenses and copyright notices of third-party materials.
+
+You may keep modifications private without publishing them to the general public. However, when you distribute a covered modified version, the GPL's source-code and licensing obligations apply to the recipients as specified in the license.
+
+6. Redistribution of the Original Application
+
+You may redistribute copies of RGB-LED-REMOTE, including source-code copies, subject to the GNU GPL.
+
+Redistribution may include:
+
+- Sharing the source code through Git repositories.
+- Publishing permitted copies on code-hosting platforms.
+- Sharing the application with other developers.
+- Providing copies to educational institutions.
+- Redistributing the application through permitted software distribution channels.
+- Sharing the application with individuals or organizations.
+- Distributing the application commercially or without charge.
+
+When redistributing the covered software, you must preserve the required legal notices and provide a copy of the GPL license.
+
+If you distribute executable binaries, including APK files, you must comply with the GPL requirements for corresponding source code and the applicable method of distribution.
+
+A public source-code repository may be an appropriate way to provide corresponding source code, but the precise obligations depend on the method and circumstances of distribution.
+
+7. Commercial Use and Distribution
+
+Commercial use is permitted under the GNU GPL.
+
+You may, subject to the license:
+
+- Sell copies of the covered application.
+- Charge for distributing copies.
+- Offer paid installation or setup services.
+- Provide paid technical support.
+- Offer customization services.
+- Distribute a modified version commercially.
+- Charge for development, maintenance, or consulting services related to the software.
+
+Commercial distribution does not remove the GPL obligations.
+
+If you distribute a covered version of the software, recipients must receive the rights granted by the applicable GPL terms. You must not use a commercial arrangement to prohibit recipients from exercising rights the GPL grants them.
+
+The GPL does not require you to distribute the software free of charge.
+
+8. APK Files and Compiled Versions
+
+Compiled Android APK files may be redistributed under the conditions of the GPL where the APK contains or constitutes a covered work.
+
+If you distribute an APK containing covered software, you must meet the applicable requirements concerning:
+
+- The license and copyright notices.
+- Access to the corresponding source code.
+- Required notices of modifications.
+- Preservation of recipients' GPL rights.
+- Any applicable requirements for installation information under the license.
+
+A compiled APK does not replace the source code when the GPL requires corresponding source code to be provided.
+
+The corresponding source should include the materials required by the GPL to build, install, run, and modify the covered executable, subject to the license's definitions and exclusions.
+
+9. User Interface and Application Design
+
+Original copyrightable interface implementations and other original creative materials that are part of the covered program may be subject to this license.
+
+Permitted activities may include:
+
+- Modifying original interface code.
+- Reusing covered widgets and components.
+- Changing layouts and spacing.
+- Adjusting colors and themes.
+- Improving accessibility.
+- Reworking navigation.
+- Creating modified interfaces based on the covered implementation.
+
+Copyright and trademark rights are different. This software license does not automatically grant permission to use the project name, logo, or other branding as though your version were an official release.
+
+A particular visual element may also be subject to a separate asset license or the rights of another copyright holder.
+
+10. Project Name, Logo, Branding, and Official Identity
+
+The project name RGB-LED-REMOTE and any original logo, branding, or identity materials may be subject to rights separate from the software copyright.
+
+Unless a separate notice or permission expressly states otherwise, the GPL license for the software should not be interpreted as a blanket trademark license.
+
+You may create and distribute a modified version of the covered software in accordance with the GPL. However, you must not falsely represent your modified version as an official release, falsely claim endorsement by the original developer, or mislead users about the origin of your version.
+
+Where appropriate, identify modified versions with a distinct name, icon, or other identifying information.
+
+This section does not create ownership of a trademark or asset that the copyright holder does not own.
+
+11. Screenshots, Images, Icons, Fonts, and Other Assets
+
+Images, screenshots, icons, fonts, illustrations, sound files, and other assets may have separate copyright or licensing conditions.
+
+Unless an asset is expressly identified as original project material covered by the GPL, do not assume that it is freely reusable merely because it appears in the repository or application.
+
+Before redistributing or modifying such materials, verify:
+
+- Who owns the asset.
+- Whether the asset is included under the GPL.
+- Whether a separate license applies.
+- Whether attribution is required.
+- Whether commercial use is permitted.
+- Whether modifications or redistribution are restricted.
+
+Third-party assets remain subject to their applicable license terms.
+
+12. Third-Party Libraries and Dependencies
+
+RGB-LED-REMOTE may use third-party Flutter packages, Dart libraries, Android components, plugins, or other external software.
+
+Those components are not automatically relicensed under this project's license merely because they are dependencies.
+
+Each third-party component remains subject to its own applicable license and copyright notices.
+
+Redistributors are responsible for respecting the relevant license requirements for the components they distribute.
+
+The inclusion of a dependency in the project does not imply that the original developer owns that dependency or can grant rights beyond those permitted by its license.
+
+13. Contributions from Other Developers
+
+Contributions from other developers may be included in the project subject to the applicable copyright and licensing terms.
+
+Submitting a contribution does not automatically transfer the contributor's copyright ownership to the project maintainer.
+
+Unless a separate agreement or contribution notice states otherwise, contributors retain whatever rights they hold in their contributions while granting the permissions associated with the applicable license.
+
+Contributors should submit only material they are entitled to contribute and should preserve relevant third-party notices.
+
+14. Attribution and Copyright Notices
+
+When redistributing covered source code, preserve copyright and license notices as required by the GPL.
+
+You must not remove legally required notices or falsely claim authorship of code written by another person.
+
+You may identify your own modifications and acknowledge your contributions.
+
+The GPL does not generally require every downstream user to display a promotional credit to the original author. Its actual notice-preservation requirements must be followed as written.
+
+15. Restrictions on Additional Terms
+
+You may not impose additional restrictions on recipients that conflict with the rights granted by the GPL.
+
+For example, you must not distribute a covered version under terms that prohibit recipients from exercising GPL rights to copy, modify, or redistribute the covered software when those rights are granted by the license.
+
+Any additional terms must comply with the GPL, including its provisions for permitted additional permissions and other notices.
+
+16. Security, Reliability, and Compatibility
+
+This project is provided as open-source software. No guarantee is made that every version will work with every Android device, infrared transmitter, LED controller, or hardware configuration.
+
+Users and redistributors should independently evaluate compatibility and security before installing or deploying modified versions.
+
+Modifications may introduce bugs, compatibility problems, or security issues. Distributors of modified versions should clearly identify their changes and must not falsely attribute problems to an unmodified upstream version.
+
+17. No Warranty
+
+TO THE EXTENT PERMITTED BY APPLICABLE LAW, THE COVERED SOFTWARE IS PROVIDED WITHOUT WARRANTY OF ANY KIND.
+
+This includes, without limitation, implied warranties of merchantability and fitness for a particular purpose, unless an applicable written agreement expressly provides otherwise.
+
+The complete warranty disclaimer and its legal effect are governed by the official GNU General Public License, version 3, or the applicable later version.
+
+18. Limitation of Liability
+
+To the extent permitted by applicable law, the copyright holders and contributors are not liable for claims or damages arising from the use or inability to use the covered software, except where applicable law or an express written agreement provides otherwise.
+
+The official GNU GPL provisions concerning liability apply and control in the event of any inconsistency with this summary.
+
+19. Applicable License Text
+
+This document is a project-specific usage and copyright policy summary. It does not replace the full text of the GNU General Public License.
+
+The complete official license must be included in the repository's "LICENSE" file:
+
+https://www.gnu.org/licenses/gpl-3.0.txt
+
+The covered software is licensed under GNU GPL version 3, or any later version at the recipient's option, as specified in the applicable copyright and license notices.
+
+If this summary conflicts with the official license, the applicable license text governs.
+
+20. Contact and Reporting
+
+For questions concerning the project, suspected copyright issues, licensing concerns, or contributions, use the project's official repository:
+
+https://github.com/marufallammahim/RGB-Remote
+
+Please identify the relevant file, component, or asset when reporting a licensing concern.
+
+---
+
+RGB-LED-REMOTE
+Copyright (C) 2026 Maruf Allam Mahim
+
+Licensed under the GNU General Public License v3.0 or any later version.
+
+Official license: https://www.gnu.org/licenses/gpl-3.0.html
