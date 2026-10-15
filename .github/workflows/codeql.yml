@@ -1,41 +1,45 @@
-
 name: "RGB-LED-REMOTE CodeQL Security"
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
+
   pull_request:
-    branches: ["main"]
+    branches:
+      - main
+
   schedule:
     - cron: "24 6 * * 3"
+
   workflow_dispatch:
 
 permissions:
   contents: read
+  security-events: write
+  actions: read
 
 jobs:
   analyze:
-    name: Analyze (${{ matrix.language }})
+    name: Analyze GitHub Actions
     runs-on: ubuntu-latest
 
     permissions:
       contents: read
       security-events: write
-      packages: read
+      actions: read
 
-    
     steps:
       - name: Checkout RGB-LED-REMOTE
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
         with:
-          languages: ${{ matrix.language }}
-          build-mode: ${{ matrix.build-mode }}
+          languages: actions
           queries: security-extended,security-and-quality
 
       - name: Analyze RGB-LED-REMOTE
         uses: github/codeql-action/analyze@v4
         with:
-          category: "/language:${{ matrix.language }}"
+          category: "/language:actions"
