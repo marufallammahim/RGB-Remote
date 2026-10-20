@@ -17,7 +17,7 @@ class SettingsDataSourceImpl implements SettingsDataSource {
     return AppSettings(
       isVibrationEnabled: _prefs.getBool(PreferencesKeys.vibration) ?? false,
       isLightEnabled: _prefs.getBool(PreferencesKeys.light) ?? true,
-      isSoundEnabled: _prefs.getBool(PreferencesKeys.sound) ?? true,
+      isSoundEnabled: _prefs.getBool(PreferencesKeys.sound) ?? false,
       soundFileName: _prefs.getString(PreferencesKeys.soundName),
       remoteIndex: _prefs.getInt(PreferencesKeys.remoteIndex) ?? 0,
       themeName: _validatedTheme(_prefs.getString(PreferencesKeys.themeName)),
