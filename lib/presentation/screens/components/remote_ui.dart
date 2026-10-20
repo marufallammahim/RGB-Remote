@@ -44,8 +44,8 @@ class RemoteUI extends StatelessWidget {
         const borderWidth = 5.0;
         const horizontalPadding = 7.0;
         const verticalPadding = 10.0;
-        const extraBottomHeight = 10.0;
-        const extraTopHeight = 25.0;
+        const extraBottomHeight = 10.0; //extra bottom height for status display
+        const extraTopHeight = 25.0; //extra top height for status display
 
         final buttonCellWidth =
             (panelWidth -
@@ -75,9 +75,9 @@ class RemoteUI extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(
                 horizontalPadding,
-                verticalPadding + extraTopHeight,
+                verticalPadding + extraTopHeight, //extra top height for status display
                 horizontalPadding,
-                verticalPadding + extraBottomHeight,
+                verticalPadding + extraBottomHeight, //extra bottom height for status display
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
