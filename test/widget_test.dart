@@ -21,6 +21,8 @@ void main() {
 
   test('copyWith can clear an optional sound name', () {
     const settings = AppSettings(soundFileName: 'tap');
-    expect(settings.copyWith(soundFileName: null).soundFileName, isNull);
+    expect(settings.copyWith(soundFileName: null).soundFileName, isNull); // Test that soundFileName can be cleared
+    expect(settings.copyWith(soundFileName: 'click').soundFileName, 'click'); //
+    expect(settings.copyWith(isVibrationEnabled: true).isVibrationEnabled, isTrue); // Test that vibration can be enabled
   });
 }
