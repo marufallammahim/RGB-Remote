@@ -21,7 +21,7 @@ final StreamController<EventState> eventController =
 
 /// Current command shown in the remote's built-in status display.
 final ValueNotifier<String> remoteStatusNotifier =
-    ValueNotifier<String>('STATUS:READY • SELECT A COLOR');
+    ValueNotifier<String>('STATUS:READY • SELECT A COLOR'); 
 
 enum EventState {
 lightEffect,
@@ -48,13 +48,13 @@ late int _selectedRemote;
 
 final List<RemoteConfig> _remotes = [
 RemoteConfig(
-name: 'Preset ONE ✨ ',
+name: 'Preset ONE ✨ ', // Add a sparkle emoji to the name
 ui: RemoteUI(
 prontoData: getProntoData(ProntoDataType.type1),
 ),
 ),
 RemoteConfig(
-name: 'Preset TWO 🤌🏻 ',
+name: 'Preset TWO 🤌🏻 ', // Add a hand emoji to the name
 ui: RemoteUI(
 prontoData: getProntoData(ProntoDataType.type2),
 ),
@@ -88,7 +88,7 @@ Future<void> _handleHardwareVolumeKey(bool increase) async {
     }
   }
   if (command == null) return;
-  remoteStatusNotifier.value = increase
+  remoteStatusNotifier.value = increase 
       ? 'SENDING: BRIGHTNESS UP'
       : 'SENDING: BRIGHTNESS DOWN';
   try {
