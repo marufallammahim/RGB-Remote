@@ -1,6 +1,6 @@
 
 name: rgb_remote
-description: A Flutter application to control rgb led strip light and bulb.
+description: A Flutter application to control rgb led strip light and bulb. Application to control rgb led strip light and bulb using esp32 and esp8266 microcontrollers. The application allows users to connect to the microcontroller via ir sensor and control the color, brightness, and other settings of the connected RGB devices.
 publish_to: none
 version: 1.0.0+7
 
