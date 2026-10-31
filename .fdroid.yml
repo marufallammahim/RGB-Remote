@@ -1,0 +1,42 @@
+Categories:
+  - Connectivity
+License: GPL-3.0-or-later
+AuthorName: Maruf Allam Mahim
+Name: RGB Remote
+Summary: Infrared remote for compatible RGB LED strips and bulbs
+Description: |-
+  Control compatible RGB LED strip lights and bulbs using a phone with a
+  built-in consumer infrared emitter.
+  .
+  Features include remote-control buttons, brightness commands where supported,
+  saved appearance and feedback preferences, and bundled controller presets.
+  .
+  A compatible IR emitter and controller are required. The app cannot confirm
+  that the physical LED controller received a command.
+SourceCode: https://github.com/marufallammahim/RGB-Remote
+IssueTracker: https://github.com/marufallammahim/RGB-Remote/issues
+RepoType: git
+Repo: https://github.com/marufallammahim/RGB-Remote.git
+UpdateCheckMode: None
+CurrentVersion: 1.0.0
+CurrentVersionCode: 7
+Builds:
+  - versionName: 1.0.0
+    versionCode: 7
+    commit: 322613fc3bff690e5541f84484ce76f781a21769
+    srclibs:
+      - flutter@3.47.7
+    rm:
+      - ios
+      - linux
+      - macos
+      - web
+      - windows
+    prebuild:
+      - $$flutter$$/bin/flutter config --no-analytics
+      - export PUB_CACHE=$(pwd)/.pub-cache && $$flutter$$/bin/flutter pub get
+    scandelete:
+      - .pub-cache
+    build:
+      - export PUB_CACHE=$(pwd)/.pub-cache && FDROID_BUILD=1 $$flutter$$/bin/flutter build apk --release
+    output: build/app/outputs/flutter-apk/app-release.apk
