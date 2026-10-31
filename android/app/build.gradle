@@ -33,7 +33,7 @@ android {
 
     signingConfigs {
         release {
-            // Codemagic signing variables are used only when a keystore path is provided.
+            // CI release signing is configured through environment variables.
             if (System.getenv('CM_KEYSTORE_PATH')) {
                 storeFile file(System.getenv('CM_KEYSTORE_PATH'))
                 storePassword System.getenv('CM_KEYSTORE_PASSWORD')
@@ -54,8 +54,11 @@ android {
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
-            // Use the debug key only when no release keystore is configured (CI/testing builds).
-            if (System.getenv('CM_KEYSTORE_PATH') ||
+            // F-Droid must sign the final APK with its own signing key.
+            // Keep existing CI/local signing behaviour outside F-Droid builds.
+            if (System.getenv('FDROID_BUILD') == '1') {
+                signingConfig null
+            } else if (System.getenv('CM_KEYSTORE_PATH') ||
                     (keystorePropertiesFile.exists() && keystoreProperties['storeFile'])) {
                 signingConfig signingConfigs.release
             } else {
