@@ -54,9 +54,10 @@ The recipe has **not** been executed with `fdroid build` or in F-Droid's server 
 - [ ] Merge/review this preparation branch and create a public release tag.
 - [ ] Update `.fdroid.yml` to the exact final release commit and verify its metadata syntax with `fdroid lint`.
 - [ ] Complete the root GPL license correction and confirm rights for all original source/assets.
-- [ ] Resolve the `material_neumorphic` license blocker or replace the package.
+- [ ] Preserve the MIT notice for `material_neumorphic` and complete the transitive dependency review.
 - [ ] Audit every transitive Dart/Flutter dependency and Android/Maven dependency.
 - [ ] Audit all icon fonts, app icons, images, screenshots, sounds, and other bundled assets.
+- [ ] Confirm the project meets F-Droid's activity/maintenance expectations or document a valid exception.
 - [ ] Inspect the merged release manifest and final APK permissions.
 - [ ] Run `flutter pub get --enforce-lockfile`, `flutter analyze`, and `flutter test`.
 - [ ] Run the F-Droid build recipe in a clean F-Droid build environment.
