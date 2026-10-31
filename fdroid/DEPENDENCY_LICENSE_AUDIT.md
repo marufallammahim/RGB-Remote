@@ -7,7 +7,7 @@ Audit scope: direct Flutter dependencies pinned by the repository's `pubspec.loc
 | Package | Locked version | Published package license | Result |
 | --- | ---: | --- | --- |
 | `flutter_font_icons` | 3.0.0 | Apache-2.0 | Package license identified; bundled icon-font families need individual upstream license/notice review |
-| `material_neumorphic` | 1.2.1 | Not verified | **BLOCKER:** inspect the exact archive's LICENSE/COPYING and all bundled/transitive components |
+| `material_neumorphic` | 1.2.1 | MIT | Package license identified from the exact pub.dev version page; preserve its copyright/permission notice |
 | `flutter_dropdown_alert` | 1.0.7 | MIT | Package license identified |
 | `shared_preferences` | 2.5.3 | BSD-3-Clause | Package license identified |
 | `package_info_plus` | 8.3.0 | BSD-3-Clause | Package license identified |
@@ -21,7 +21,7 @@ Audit scope: direct Flutter dependencies pinned by the repository's `pubspec.loc
 - Audit Android Gradle/Maven dependencies resolved by AGP, Kotlin, and Flutter plugins; record exact versions and licenses.
 - Inspect the `flutter_font_icons` archive and identify the license for every font family actually bundled into the APK. The package's Apache-2.0 declaration does not automatically replace notices from upstream icon/font projects.
 - Inspect all repository assets, app icons, screenshots, sounds, and any binary files for ownership, license, and redistribution rights.
-- Confirm that the exact `material_neumorphic 1.2.1` source archive has a valid FLOSS license. If its license is missing, unclear, or incompatible, remove/replace it before F-Droid submission.
+- Preserve the MIT copyright and permission notice for `material_neumorphic 1.2.1` in the third-party notices bundle, and inspect its transitive components.
 - Generate a complete notices file from the exact release build's dependency graph, not merely from this direct-dependency table.
 
 ## Evidence links
