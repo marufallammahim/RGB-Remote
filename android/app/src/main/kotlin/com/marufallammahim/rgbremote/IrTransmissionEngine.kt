@@ -19,7 +19,9 @@ object IrTransmissionEngine {
         1, 1, 0L, TimeUnit.MILLISECONDS,
         ArrayBlockingQueue<Runnable>(QUEUE_CAPACITY),
         ThreadPoolExecutor.AbortPolicy()
-    )
+    ).apply {
+        allowCoreThreadTimeOut(true)
+    }
 
     @Volatile private var irManager: ConsumerIrManager? = null
 
