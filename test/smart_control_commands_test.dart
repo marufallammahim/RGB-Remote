@@ -16,7 +16,7 @@ void main() {
       expect(offCommands, hasLength(1));
 
       for (final command in [onCommands.single, offCommands.single]) {
-        final words = command.pattern.trim().split(RegExp(r'\\s+'));
+        final words = command.pattern.trim().split(RegExp(r'\s+'));
         expect(words.length, greaterThanOrEqualTo(6));
         expect(words.first.toUpperCase(), '0000');
         expect(words.every((word) => RegExp(r'^[0-9A-Fa-f]{1,4}$').hasMatch(word)), isTrue);
