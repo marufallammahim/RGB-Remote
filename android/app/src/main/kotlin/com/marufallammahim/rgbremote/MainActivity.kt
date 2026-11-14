@@ -51,7 +51,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         IrTransmissionEngine.initialize(applicationContext)
-        channel =(flutterEngine.dartExecutor.binaryMessenger, "ir_sensor_plugin")
+        channel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "ir_sensor_plugin")
         channel.setMethodCallHandler(this)
 
         attributes = AudioAttributes.Builder()
