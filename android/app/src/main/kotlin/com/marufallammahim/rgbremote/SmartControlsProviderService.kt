@@ -77,7 +77,6 @@ class SmartControlsProviderService : ControlsProviderService() {
             .setSubtitle("RGB Remote")
             .setDeviceType(DeviceTypes.TYPE_LIGHT)
             .setStatus(Control.STATUS_OK)
-            .setAuthRequired(false)
             .setControlTemplate(StatelessTemplate(id))
             .setStructure("RGB Remote")
             .build()
