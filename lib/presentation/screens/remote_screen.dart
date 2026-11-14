@@ -70,6 +70,7 @@ _selectedRemote = _settingsService.settingsNotifier.value.remoteIndex
     .toInt();
 
 _initializeAnimationController();
+unawaited(_syncSmartControlCommands());
 IrSensorPlugin.installHardwareVolumeKeyHandler();
 IrSensorPlugin.onHardwareVolumeKey = _handleHardwareVolumeKey;
 
@@ -140,6 +141,20 @@ _subscription = eventController.stream.listen((event) {
 
 }
 
+Future<void> _syncSmartControlCommands() async {
+  final commands = _remotes[_selectedRemote].ui.prontoData;
+  try {
+    final onCommand = commands.firstWhere((command) => command.name.trim().toUpperCase() == 'ON');
+    final offCommand = commands.firstWhere((command) => command.name.trim().toUpperCase() == 'OFF');
+    await IrSensorPlugin.syncSmartControlCommands(
+      onPattern: onCommand.pattern,
+      offPattern: offCommand.pattern,
+    );
+  } catch (error) {
+    debugPrint('Smart Control command sync skipped: $error');
+  }
+}
+
 Future<void> _updateSelectedRemote(int index) async {
 final int newIndex = index.clamp(0, _remotes.length - 1).toInt();
 
@@ -150,6 +165,7 @@ setState(() {
 });
 
 await _settingsService.updateRemote(newIndex);
+await _syncSmartControlCommands();
 
 }
 
