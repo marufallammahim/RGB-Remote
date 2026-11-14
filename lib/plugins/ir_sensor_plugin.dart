@@ -68,6 +68,19 @@ class IrSensorPlugin {
     return await _channel.invokeMethod('transmitListInt', {"transmitListInt": list});
   }
 
+  /// Shares the currently selected remote preset's ON/OFF Pronto commands
+  /// with native Android components so widgets and Device Controls can work
+  /// without a running Flutter UI.
+  static Future<void> syncSmartControlCommands({
+    required String onPattern,
+    required String offPattern,
+  }) async {
+    await _channel.invokeMethod('syncSmartControlCommands', {
+      'onPattern': onPattern,
+      'offPattern': offPattern,
+    });
+  }
+
   /// This method is for making vibration
   static Future<void> vibrate() async {
     return await _channel.invokeMethod('vibrate');
