@@ -115,6 +115,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
             IrTransmissionEngine.validatePronto(onPattern)
             IrTransmissionEngine.validatePronto(offPattern)
             SmartControlPreferences.save(applicationContext, onPattern, offPattern)
+            SmartControlWidgetProvider.refresh(applicationContext)
             result.success("Success")
         } catch (error: Exception) {
             result.error("INVALID_COMMANDS", error.message ?: "Invalid Pronto command.", null)
