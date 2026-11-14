@@ -37,6 +37,31 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <receiver
+            android:name=".SmartControlWidgetProvider"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/smart_control_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name=".SmartControlReceiver"
+            android:exported="false" />
+
+        <service
+            android:name=".SmartControlsProviderService"
+            android:label="RGB Remote"
+            android:enabled="@bool/smart_controls_service_enabled"
+            android:permission="android.permission.BIND_CONTROLS"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.controls.ControlsProviderService" />
+            </intent-filter>
+        </service>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility?hl=en and
