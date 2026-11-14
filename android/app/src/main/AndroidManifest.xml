@@ -55,6 +55,7 @@
         <service
             android:name=".SmartControlsProviderService"
             android:label="RGB Remote"
+            android:enabled="@bool/smart_controls_service_enabled"
             android:permission="android.permission.BIND_CONTROLS"
             android:exported="true">
             <intent-filter>
