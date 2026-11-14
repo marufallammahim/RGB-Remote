@@ -4,111 +4,30 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:gravity="center"
-    android:padding="4dp"
+    android:padding="8dp"
     android:background="@drawable/widget_smart_controls_background">
 
-    <LinearLayout
+    <Button
         android:id="@+id/widget_light_on"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingStart="12dp"
-        android:paddingEnd="8dp"
+        android:layout_marginEnd="5dp"
         android:background="@drawable/widget_light_on_background"
-        android:clickable="true"
-        android:focusable="true">
+        android:text="LIGHT ON"
+        android:textAllCaps="true"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp" />
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/widget_light_on_icon"
-            android:contentDescription="Light on" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center_vertical"
-            android:paddingStart="8dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="RGB LIGHT"
-                android:textColor="#302300"
-                android:textSize="10sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.08"
-                android:singleLine="true" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="ON"
-                android:textColor="#211800"
-                android:textSize="17sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.04"
-                android:singleLine="true" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <View
-        android:layout_width="3dp"
-        android:layout_height="38dp"
-        android:layout_marginStart="3dp"
-        android:layout_marginEnd="3dp"
-        android:background="@drawable/widget_smart_controls_divider" />
-
-    <LinearLayout
+    <Button
         android:id="@+id/widget_light_off"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingStart="12dp"
-        android:paddingEnd="8dp"
+        android:layout_marginStart="5dp"
         android:background="@drawable/widget_light_off_background"
-        android:clickable="true"
-        android:focusable="true">
-
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/widget_light_off_icon"
-            android:contentDescription="Light off" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center_vertical"
-            android:paddingStart="8dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="RGB LIGHT"
-                android:textColor="#E5E7EB"
-                android:textSize="10sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.08"
-                android:singleLine="true" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="OFF"
-                android:textColor="#FFFFFF"
-                android:textSize="17sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.04"
-                android:singleLine="true" />
-        </LinearLayout>
-    </LinearLayout>
+        android:text="LIGHT OFF"
+        android:textAllCaps="true"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp" />
 </LinearLayout>
