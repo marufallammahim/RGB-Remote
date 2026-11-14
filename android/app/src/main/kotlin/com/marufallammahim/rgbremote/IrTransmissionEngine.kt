@@ -16,7 +16,7 @@ object IrTransmissionEngine {
     private const val QUEUE_CAPACITY = 24
 
     private val executor = ThreadPoolExecutor(
-        1, 1, 0L, TimeUnit.MILLISECONDS,
+        1, 1, 30L, TimeUnit.SECONDS,
         ArrayBlockingQueue<Runnable>(QUEUE_CAPACITY),
         ThreadPoolExecutor.AbortPolicy()
     ).apply {
