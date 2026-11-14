@@ -14,9 +14,6 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import java.util.concurrent.ThreadPoolExecutor
-import java.util.concurrent.ArrayBlockingQueue
-import java.util.concurrent.TimeUnit
 import java.util.concurrent.RejectedExecutionException
 
 
@@ -27,15 +24,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     @Volatile
     private var frequency = 38028 // 38KHz
 
-    // ConsumerIrManager.transmit() may take noticeable time. Keep it away from
-    // Flutter's platform/UI thread and serialize quick repeated button presses.
-    // A bounded queue prevents unbounded memory growth when a user taps rapidly.
-    // When saturated, a clear error is returned rather than crashing the app.
-    private val irExecutor = ThreadPoolExecutor(
-        1, 1, 0L, TimeUnit.MILLISECONDS,
-        ArrayBlockingQueue<Runnable>(24),
-        ThreadPoolExecutor.AbortPolicy()
-    )
     @Volatile private var activityDestroyed = false
     private val mainHandler = Handler(Looper.getMainLooper())
 
@@ -62,7 +50,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        channel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "ir_sensor_plugin")
+        IrTransmissionEngine.initialize(applicationContext)
+        channel =(flutterEngine.dartExecutor.binaryMessenger, "ir_sensor_plugin")
         channel.setMethodCallHandler(this)
 
         attributes = AudioAttributes.Builder()
@@ -115,6 +104,23 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         return super.onKeyUp(keyCode, event)
     }
 
+    private fun syncSmartControlCommands(call: MethodCall, result: MethodChannel.Result) {
+        val onPattern = call.argument<String>("onPattern")
+        val offPattern = call.argument<String>("offPattern")
+        if (onPattern.isNullOrBlank() || offPattern.isNullOrBlank()) {
+            result.error("INVALID_COMMANDS", "Both LIGHT ON and LIGHT OFF Pronto commands are required.", null)
+            return
+        }
+        try {
+            IrTransmissionEngine.validatePronto(onPattern)
+            IrTransmissionEngine.validatePronto(offPattern)
+            SmartControlPreferences.save(applicationContext, onPattern, offPattern)
+            result.success("Success")
+        } catch (error: Exception) {
+            result.error("INVALID_COMMANDS", error.message ?: "Invalid Pronto command.", null)
+        }
+    }
+
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "hasIrEmitter" -> hasIrEmitter(result)
@@ -125,6 +131,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
             "vibrate" -> vibrate(result)
             "rawSoundList" -> rawSoundList(result)
             "playSound" -> playSound(call, result)
+            "syncSmartControlCommands" -> syncSmartControlCommands(call, result)
             else -> result.notImplemented()
         }
     }
@@ -184,7 +191,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
      */
     private fun enqueueIr(result: MethodChannel.Result, operation: () -> Unit) {
         try {
-            irExecutor.execute {
+            IrTransmissionEngine.execute {
                 try {
                     operation()
                     mainHandler.post {
@@ -226,9 +233,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
         }
 
         enqueueIr(result) {
-            // The Pronto header contains the intended carrier; use it for this command.
-            val parsed = parsePronto(pattern)
-            manager.transmit(parsed.carrierFrequency, parsed.durations)
+            IrTransmissionEngine.transmitPronto(applicationContext, pattern)
         }
     }
 
@@ -362,7 +367,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
     override fun onDestroy() {
         activityDestroyed = true
-        if (!irExecutor.isShutdown) irExecutor.shutdownNow()
         super.onDestroy()
     }
 
