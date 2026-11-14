@@ -7,7 +7,6 @@ import 'package:rgb_remote/presentation/screens/components/tooltip_widget.dart';
 
 import '../../application/services/back_press_handler.dart';
 import '../../application/services/settings_service.dart';
-import '../../application/services/smart_control_sync_service.dart';
 import '../../data/models/remote_config.dart';
 import '../../data/models/pronto_command.dart';
 import '../../domain/entities/app_settings.dart';
@@ -71,6 +70,7 @@ _selectedRemote = _settingsService.settingsNotifier.value.remoteIndex
     .toInt();
 
 _initializeAnimationController();
+unawaited(_syncSmartControlCommands());
 IrSensorPlugin.installHardwareVolumeKeyHandler();
 IrSensorPlugin.onHardwareVolumeKey = _handleHardwareVolumeKey;
 
@@ -142,8 +142,14 @@ _subscription = eventController.stream.listen((event) {
 }
 
 Future<void> _syncSmartControlCommands() async {
+  final commands = _remotes[_selectedRemote].ui.prontoData;
   try {
-    await SmartControlSyncService.syncRemote(_selectedRemote);
+    final onCommand = commands.firstWhere((command) => command.name.trim().toUpperCase() == 'ON');
+    final offCommand = commands.firstWhere((command) => command.name.trim().toUpperCase() == 'OFF');
+    await IrSensorPlugin.syncSmartControlCommands(
+      onPattern: onCommand.pattern,
+      offPattern: offCommand.pattern,
+    );
   } catch (error) {
     debugPrint('Smart Control command sync skipped: $error');
   }
