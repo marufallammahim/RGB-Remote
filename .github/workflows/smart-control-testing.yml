@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: smart-control-testing-${{ github.ref }}
+  group: smart-control-testing-recovery-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
