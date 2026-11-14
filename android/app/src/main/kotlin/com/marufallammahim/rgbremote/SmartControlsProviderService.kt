@@ -66,7 +66,7 @@ class SmartControlsProviderService : ControlsProviderService() {
         return Control.StatelessBuilder(id, appIntent(requestCode))
             .setTitle(title)
             .setSubtitle("RGB Remote")
-            .setDeviceType(DeviceTypes.TYPE_GENERIC_ON_OFF)
+            .setDeviceType(DeviceTypes.TYPE_LIGHT)
             .setStructure("RGB Remote")
             .build()
     }
@@ -75,7 +75,7 @@ class SmartControlsProviderService : ControlsProviderService() {
         return Control.StatefulBuilder(id, appIntent(requestCode))
             .setTitle(title)
             .setSubtitle("RGB Remote")
-            .setDeviceType(DeviceTypes.TYPE_GENERIC_ON_OFF)
+            .setDeviceType(DeviceTypes.TYPE_LIGHT)
             .setStatus(Control.STATUS_OK)
             .setControlTemplate(StatelessTemplate(id))
             .setStructure("RGB Remote")
