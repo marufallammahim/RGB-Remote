@@ -71,7 +71,6 @@ _selectedRemote = _settingsService.settingsNotifier.value.remoteIndex
     .toInt();
 
 _initializeAnimationController();
-unawaited(_syncSmartControlCommands());
 IrSensorPlugin.installHardwareVolumeKeyHandler();
 IrSensorPlugin.onHardwareVolumeKey = _handleHardwareVolumeKey;
 
