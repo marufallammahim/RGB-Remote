@@ -120,7 +120,13 @@ jobs:
           echo "Release keystore and alias validated."
 
       - name: Build ABI-specific release APKs
-        run: flutter build apk --release --split-per-abi
+        run: |
+          set -euo pipefail
+          flutter build apk --release --split-per-abi
+          mkdir -p build/signed-split-apks
+          cp build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk build/signed-split-apks/
+          cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk build/signed-split-apks/
+          cp build/app/outputs/flutter-apk/app-x86_64-release.apk build/signed-split-apks/
 
       - name: Build universal release APK
         run: flutter build apk --release
@@ -134,9 +140,9 @@ jobs:
           RELEASE="release"
           mkdir -p "$RELEASE"
 
-          cp "$OUT/app-armeabi-v7a-release.apk" "$RELEASE/RGB-LED-REMOTE-armeabi-v7a.apk"
-          cp "$OUT/app-arm64-v8a-release.apk" "$RELEASE/RGB-LED-REMOTE-arm64-v8a.apk"
-          cp "$OUT/app-x86_64-release.apk" "$RELEASE/RGB-LED-REMOTE-x86_64.apk"
+          cp build/signed-split-apks/app-armeabi-v7a-release.apk "$RELEASE/RGB-LED-REMOTE-armeabi-v7a.apk"
+          cp build/signed-split-apks/app-arm64-v8a-release.apk "$RELEASE/RGB-LED-REMOTE-arm64-v8a.apk"
+          cp build/signed-split-apks/app-x86_64-release.apk "$RELEASE/RGB-LED-REMOTE-x86_64.apk"
           cp "$OUT/app-release.apk" "$RELEASE/RGB-LED-REMOTE-universal.apk"
 
           BUILD_TOOLS="$(find "$ANDROID_SDK_ROOT/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n1)"
