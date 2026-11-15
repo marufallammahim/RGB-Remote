@@ -74,7 +74,7 @@ The workflow `.github/workflows/signed-release.yml`:
 - A manual `workflow_dispatch` run builds and uploads signed APKs as a temporary Actions artifact; it does not publish a Stable Release.
 - Leaves the F-Droid unsigned workflow separate and unchanged.
 
-To publish a stable release, update `pubspec.yaml` first using a version newer than the existing stable release. The latest existing stable tag is `v1.0.3`; therefore the next version must be higher (for example, `1.0.4+8`), and the tag must match the version name (for example, `v1.0.4`). The workflow also checks that Android `versionCode` increases over the previous version tag.
+To publish a stable release, update `pubspec.yaml` first using a version newer than the existing stable release. The latest existing stable tag is `v1.0.3`; therefore the next version name must be higher (for example, `1.0.4`). Set its Android `versionCode` to a number higher than the one recorded in the previous version tag; the workflow checks this automatically. Then create the matching tag (for example, `v1.0.4`).
 
 To test the signing setup before publishing, open **Actions → RGB-LED-REMOTE Signed Android Release → Run workflow**. The signed APKs will be available in that run's Artifacts section.
 
