@@ -8,19 +8,46 @@ This repository uses a persistent Android signing identity for customer-facing A
 - Never commit the keystore, `key.properties`, passwords, or Base64 keystore data.
 - Never generate a new keystore for routine app updates. Every update must use the same keystore and alias.
 - Do not use the debug signing key for customer releases.
-- A new signing key cannot update an older installation signed with a different certificate. Verify the old public APK certificate before the first production release.
+- A new signing key cannot update an older installation signed with a different certificate. Verify the old public APK certificate before promising seamless updates.
 
-## 1. Generate the keystore (Windows PowerShell)
+## 1. Generate the keystore on Arch Linux
 
-Run this once in a private folder on a trusted computer:
+Install Java 17:
 
-```powershell
-keytool -genkeypair -v -keystore RGB-LED-REMOTE-release.jks -storetype JKS -keyalg RSA -keysize 2048 -validity 10000 -alias rgbremote
+```bash
+sudo pacman -S --needed jdk17-openjdk
 ```
 
-Use a strong, unique keystore password and key password. Save them in a password manager. Keep the JKS file backed up securely.
+Generate the keystore once in a private directory:
 
-## 2. Add repository Actions secrets
+```bash
+keytool -genkeypair -v \
+  -keystore RGB-LED-REMOTE-release.jks \
+  -storetype JKS \
+  -keyalg RSA \
+  -keysize 2048 \
+  -validity 10000 \
+  -alias rgbremote
+```
+
+Use strong, unique passwords. Keep the JKS file and passwords in secure offline backups/password manager. The JKS deprecation warning does not mean key generation failed; this workflow supports the JKS file created by the command above.
+
+## 2. Encode the keystore for GitHub Actions
+
+From the directory containing the JKS file:
+
+```bash
+base64 -w 0 RGB-LED-REMOTE-release.jks > keystore-base64.txt
+```
+
+Copy the value to the clipboard if you have a clipboard utility installed:
+
+- Wayland: `wl-copy < keystore-base64.txt` (package: `wl-clipboard`)
+- X11: `xclip -selection clipboard -i keystore-base64.txt` (package: `xclip`)
+
+Or open `keystore-base64.txt` in a text editor and copy its complete single-line content. Do not paste the value into chat, terminal logs, or repository files.
+
+## 3. Add repository Actions secrets
 
 Open:
 
@@ -30,64 +57,33 @@ Create these four secrets (names are case-sensitive):
 
 | Secret name | Value |
 |---|---|
-| `ANDROID_KEYSTORE_BASE64` | Base64 encoding of the complete `.jks` file |
+| `ANDROID_KEYSTORE_BASE64` | Complete Base64 encoding of the JKS file |
 | `ANDROID_KEYSTORE_PASSWORD` | Keystore password |
 | `ANDROID_KEY_ALIAS` | `rgbremote` |
 | `ANDROID_KEY_PASSWORD` | Password for the `rgbremote` key |
 
-To obtain the Base64 value in PowerShell (do not print it in a terminal or commit it):
+## 4. Build and publish signed releases
 
-```powershell
-[Convert]::ToBase64String([IO.File]::ReadAllBytes("$PWD\RGB-LED-REMOTE-release.jks")) | Set-Clipboard
-```
+The workflow `.github/workflows/signed-release.yml`:
 
-Paste the clipboard value directly into the `ANDROID_KEYSTORE_BASE64` secret field, then clear the clipboard.
+- Uses the four repository secrets to reconstruct the JKS only on the temporary GitHub-hosted runner.
+- Runs `flutter pub get`, `flutter analyze`, and `flutter test`.
+- Builds ABI-specific APKs plus a universal APK.
+- Verifies every APK signature and confirms that all four APKs use the same certificate.
+- Publishes APKs, SHA-256 checksums, and build information when a matching version tag is pushed.
+- A manual `workflow_dispatch` run builds and uploads signed APKs as a temporary Actions artifact; it does not publish a Stable Release.
+- Leaves the F-Droid unsigned workflow separate and unchanged.
 
-## 3. How a signed GitHub Actions job should prepare signing
+To publish a stable release, update `pubspec.yaml` first using a version newer than the existing stable release. The latest existing stable tag is `v1.0.3`; therefore the next version must be higher (for example, `1.0.4+8`), and the tag must match the version name (for example, `v1.0.4`). The workflow also checks that Android `versionCode` increases over the previous version tag.
 
-A signed workflow should decode the keystore only inside the temporary GitHub-hosted runner and create `android/key.properties`:
+To test the signing setup before publishing, open **Actions → RGB-LED-REMOTE Signed Android Release → Run workflow**. The signed APKs will be available in that run's Artifacts section.
 
-```yaml
-- name: Configure Android release signing
-  env:
-    ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-    ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-    ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-    ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-  run: |
-    set -euo pipefail
-    test -n "$ANDROID_KEYSTORE_BASE64"
-    test -n "$ANDROID_KEYSTORE_PASSWORD"
-    test -n "$ANDROID_KEY_ALIAS"
-    test -n "$ANDROID_KEY_PASSWORD"
+## 5. Verify signing identity
 
-    echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/upload-keystore.jks
-    chmod 600 android/upload-keystore.jks
+The workflow prints the SHA-256 signing certificate digest and stores it in `BUILD-INFO.txt`. Future releases must report the same digest. Also compare it with the certificate of any APK currently installed by users before promising seamless in-place upgrades.
 
-    cat > android/key.properties <<EOF
-    storeFile=../upload-keystore.jks
-    storePassword=$ANDROID_KEYSTORE_PASSWORD
-    keyAlias=$ANDROID_KEY_ALIAS
-    keyPassword=$ANDROID_KEY_PASSWORD
-    EOF
-    chmod 600 android/key.properties
-```
+## Repository security
 
-The existing `android/app/build.gradle` already reads `android/key.properties` and uses it for release signing when the configured keystore exists.
-
-## 4. Verify the signing identity
-
-After a signed APK is built, verify it with Android Build Tools:
-
-```bash
-apksigner verify --verbose --print-certs path/to/app-release.apk
-```
-
-Record the SHA-256 certificate digest securely. Future release APKs must report the same signer certificate. Also compare it with the certificate of the currently published APK before promising seamless updates.
-
-## Repository status
-
-- `android/app/build.gradle` supports the `android/key.properties` signing route.
-- `.gitignore` excludes `android/key.properties` and JKS/keystore files.
-- The existing `.github/workflows/android-apk.yml` is intentionally an unsigned F-Droid-compatible build; do not turn that workflow into a customer release workflow.
-- Repository Actions secrets must be entered by an authorized repository owner in GitHub Settings. The connected GitHub integration cannot create or read secret values.
+- `android/key.properties` and JKS/keystore files are excluded by `.gitignore`.
+- Never upload the JKS file to the repository or expose any secret value.
+- The existing `.github/workflows/android-apk.yml` remains an unsigned F-Droid-compatible build and is intentionally not used for customer releases.
