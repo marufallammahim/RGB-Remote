@@ -42,3 +42,10 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /android/app/.cxx/
+
+# Android release signing credentials (NEVER commit these)
+/android/key.properties
+/android/*.jks
+/android/*.keystore
+/android/app/*.jks
+/android/app/*.keystore
