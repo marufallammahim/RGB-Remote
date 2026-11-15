@@ -37,6 +37,9 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
+          # Keep this release toolchain compatible with Gradle 8.14.3,
+          # AGP 8.11.1, and Kotlin 2.2.20. Flutter 3.50 requires Gradle 9.x.
+          flutter-version: '3.47.9'
           channel: stable
           cache: true
 
