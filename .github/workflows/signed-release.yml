@@ -2,6 +2,8 @@ name: RGB-LED-REMOTE Signed Android Release
 
 on:
   push:
+    branches:
+      - main
     tags:
       - 'v*'
   workflow_dispatch:
@@ -189,11 +191,12 @@ jobs:
           retention-days: 30
 
       - name: Publish GitHub Release
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+        if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')) || (github.event_name == 'push' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, 'Publish RGB-LED-REMOTE v1.0.4'))
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name }}
-          name: RGB-LED-REMOTE ${{ github.ref_name }}
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || 'v1.0.4' }}
+          target_commitish: main
+          name: RGB-LED-REMOTE ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || 'v1.0.4' }}
           draft: false
           prerelease: false
           generate_release_notes: true
