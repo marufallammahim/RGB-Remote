@@ -49,6 +49,28 @@
         </receiver>
 
         <receiver
+            android:name=".SmartControlCompactWidgetProvider"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/smart_control_widget_compact_info" />
+        </receiver>
+
+        <receiver
+            android:name=".SmartControlPanelWidgetProvider"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/smart_control_widget_panel_info" />
+        </receiver>
+
+        <receiver
             android:name=".SmartControlReceiver"
             android:exported="false" />
 
