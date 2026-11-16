@@ -146,9 +146,11 @@ Future<void> _syncSmartControlCommands() async {
   try {
     final onCommand = commands.firstWhere((command) => command.name.trim().toUpperCase() == 'ON');
     final offCommand = commands.firstWhere((command) => command.name.trim().toUpperCase() == 'OFF');
+    final whiteCommand = commands.firstWhere((command) => command.name.trim().toUpperCase() == 'W');
     await IrSensorPlugin.syncSmartControlCommands(
       onPattern: onCommand.pattern,
       offPattern: offCommand.pattern,
+      whitePattern: whiteCommand.pattern,
     );
   } catch (error) {
     debugPrint('Smart Control command sync skipped: $error');
