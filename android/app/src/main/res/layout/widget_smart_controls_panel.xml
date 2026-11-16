@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="9dp"
+    android:background="#111111">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="7dp"
+        android:text="RGB REMOTE  /  SMART LIGHT"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:textSize="12sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/widget_light_on"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/widget_brutal_yellow"
+            android:text="LIGHT ON"
+            android:textColor="#111111"
+            android:textStyle="bold"
+            android:textSize="12sp" />
+        <Button
+            android:id="@+id/widget_light_off"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp"
+            android:background="@drawable/widget_brutal_pink"
+            android:text="LIGHT OFF"
+            android:textColor="#111111"
+            android:textStyle="bold"
+            android:textSize="12sp" />
+    </LinearLayout>
+    <Button
+        android:id="@+id/widget_light_white"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/widget_brutal_white"
+        android:text="ALL LIGHTS  /  WHITE"
+        android:textColor="#111111"
+        android:textStyle="bold"
+        android:textSize="13sp" />
+</LinearLayout>
