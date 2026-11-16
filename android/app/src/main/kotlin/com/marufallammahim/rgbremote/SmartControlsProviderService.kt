@@ -19,7 +19,8 @@ class SmartControlsProviderService : ControlsProviderService() {
     override fun createPublisherForAllAvailable(): Flow.Publisher<Control> {
         val controls = listOf(
             createAvailableControl(SmartControlPreferences.LIGHT_ON_ID, "LIGHT ON", 5101),
-            createAvailableControl(SmartControlPreferences.LIGHT_OFF_ID, "LIGHT OFF", 5102)
+            createAvailableControl(SmartControlPreferences.LIGHT_OFF_ID, "LIGHT OFF", 5102),
+            createAvailableControl(SmartControlPreferences.WHITE_ID, "WHITE", 5103)
         )
         return publisher(controls, completeAfterEmission = true)
     }
@@ -31,6 +32,8 @@ class SmartControlsProviderService : ControlsProviderService() {
                     createActionControl(id, "LIGHT ON", 5201)
                 SmartControlPreferences.LIGHT_OFF_ID ->
                     createActionControl(id, "LIGHT OFF", 5202)
+                SmartControlPreferences.WHITE_ID ->
+                    createActionControl(id, "WHITE", 5203)
                 else -> null
             }
         }
