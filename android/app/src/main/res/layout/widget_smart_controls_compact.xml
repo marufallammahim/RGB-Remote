@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp"
+    android:background="#111111">
+    <Button
+        android:id="@+id/widget_light_white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/widget_brutal_white"
+        android:text="WHITE"
+        android:textAllCaps="true"
+        android:textColor="#111111"
+        android:textStyle="bold"
+        android:textSize="14sp" />
+</FrameLayout>
