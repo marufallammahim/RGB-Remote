@@ -10,6 +10,7 @@ import android.widget.Toast
 object SmartControlActions {
     const val LIGHT_ON = "com.marufallammahim.rgbremote.SMART_LIGHT_ON"
     const val LIGHT_OFF = "com.marufallammahim.rgbremote.SMART_LIGHT_OFF"
+    const val WHITE = "com.marufallammahim.rgbremote.SMART_WHITE"
 }
 
 class SmartControlReceiver : BroadcastReceiver() {
@@ -17,6 +18,7 @@ class SmartControlReceiver : BroadcastReceiver() {
         val controlId = when (intent.action) {
             SmartControlActions.LIGHT_ON -> SmartControlPreferences.LIGHT_ON_ID
             SmartControlActions.LIGHT_OFF -> SmartControlPreferences.LIGHT_OFF_ID
+            SmartControlActions.WHITE -> SmartControlPreferences.WHITE_ID
             else -> return
         }
         val pendingResult = goAsync()

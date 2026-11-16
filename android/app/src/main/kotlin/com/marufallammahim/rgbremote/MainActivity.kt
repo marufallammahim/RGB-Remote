@@ -107,14 +107,16 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
     private fun syncSmartControlCommands(call: MethodCall, result: MethodChannel.Result) {
         val onPattern = call.argument<String>("onPattern")
         val offPattern = call.argument<String>("offPattern")
-        if (onPattern.isNullOrBlank() || offPattern.isNullOrBlank()) {
-            result.error("INVALID_COMMANDS", "Both LIGHT ON and LIGHT OFF Pronto commands are required.", null)
+        val whitePattern = call.argument<String>("whitePattern")
+        if (onPattern.isNullOrBlank() || offPattern.isNullOrBlank() || whitePattern.isNullOrBlank()) {
+            result.error("INVALID_COMMANDS", "LIGHT ON, LIGHT OFF and WHITE Pronto commands are required.", null)
             return
         }
         try {
             IrTransmissionEngine.validatePronto(onPattern)
             IrTransmissionEngine.validatePronto(offPattern)
-            SmartControlPreferences.save(applicationContext, onPattern, offPattern)
+            IrTransmissionEngine.validatePronto(whitePattern)
+            SmartControlPreferences.save(applicationContext, onPattern, offPattern, whitePattern)
             result.success("Success")
         } catch (error: Exception) {
             result.error("INVALID_COMMANDS", error.message ?: "Invalid Pronto command.", null)
