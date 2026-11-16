@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: "en-US"
+early_access: false
+
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: true
+  auto_review:
+    enabled: true
+    drafts: false
+    auto_incremental_review: true
+  path_instructions:
+    - path: "**/*.dart"
+      instructions: "Prioritize runtime crashes, async lifecycle bugs, state persistence, IR command correctness, regressions, performance, and missing tests. Respect existing UI and button mappings. Avoid style-only comments already handled by flutter analyze."
+    - path: "android/**"
+      instructions: "Review Android manifest, exported components, permissions, intents, Gradle/Kotlin compatibility, SDK behavior, ABI packaging, widget providers, and signing/release safety."
+    - path: ".github/workflows/**"
+      instructions: "Review least-privilege token permissions, untrusted pull request execution, secret exposure, action pinning, artifact integrity, and release safety."
+    - path: "test/**"
+      instructions: "Check whether tests cover changed behavior and meaningful edge cases; do not ask for tests unrelated to the diff."
