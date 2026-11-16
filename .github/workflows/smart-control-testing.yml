@@ -87,5 +87,5 @@ jobs:
             release/SHA256SUMS.txt \
             --target "$GITHUB_SHA" \
             --title "RGB Remote Smart Control Testing Build ${GITHUB_RUN_NUMBER}" \
-            --notes "Testing build from smart-control-testing. Includes Android Device Controls with LIGHT ON, LIGHT OFF and WHITE actions, plus three Brutalist Home Screen Widget sizes. This is a pre-release build for device testing, not a stable main-branch release." \
+            --notes "Testing build from smart-control-testing. Includes Android Device Controls with LIGHT ON, LIGHT OFF and WHITE actions, plus five curved-bridge Neo-Brutalist Home Screen Widget designs, each with three independent IR switches. This is a pre-release build for device testing, not a stable main-branch release." \
             --prerelease
