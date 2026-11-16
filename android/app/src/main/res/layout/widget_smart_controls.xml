@@ -4,19 +4,20 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:gravity="center"
-    android:padding="8dp"
-    android:background="@drawable/widget_smart_controls_background">
+    android:padding="7dp"
+    android:background="#111111">
 
     <Button
         android:id="@+id/widget_light_on"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:layout_marginEnd="5dp"
-        android:background="@drawable/widget_light_on_background"
-        android:text="LIGHT ON"
+        android:layout_marginEnd="4dp"
+        android:background="@drawable/widget_brutal_yellow"
+        android:text="ON"
         android:textAllCaps="true"
-        android:textColor="#FFFFFF"
+        android:textColor="#111111"
+        android:textStyle="bold"
         android:textSize="12sp" />
 
     <Button
@@ -24,10 +25,24 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:layout_marginStart="5dp"
-        android:background="@drawable/widget_light_off_background"
-        android:text="LIGHT OFF"
+        android:layout_marginHorizontal="4dp"
+        android:background="@drawable/widget_brutal_pink"
+        android:text="OFF"
         android:textAllCaps="true"
-        android:textColor="#FFFFFF"
+        android:textColor="#111111"
+        android:textStyle="bold"
         android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/widget_light_white"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginStart="4dp"
+        android:background="@drawable/widget_brutal_white"
+        android:text="WHITE"
+        android:textAllCaps="true"
+        android:textColor="#111111"
+        android:textStyle="bold"
+        android:textSize="11sp" />
 </LinearLayout>
