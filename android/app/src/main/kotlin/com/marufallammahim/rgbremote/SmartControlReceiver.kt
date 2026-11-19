@@ -24,7 +24,7 @@ class SmartControlReceiver : BroadcastReceiver() {
         val pendingResult = goAsync()
         val pattern = SmartControlPreferences.getPattern(context, controlId)
         if (pattern.isNullOrBlank()) {
-            showMessage(context, "Open RGB Remote once to prepare Smart Controls.")
+            showMessage(context, "For very First time use Remote App, Pleace - Open RGB Remote once to prepare Smart Controls.")
             pendingResult.finish()
             return
         }
